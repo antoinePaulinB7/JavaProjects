@@ -3,6 +3,7 @@ import java.util.Scanner;
 import javax.swing.JComponent;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import java.util.ArrayList;
 
 public class Board extends JComponent implements Runnable {
@@ -12,22 +13,65 @@ public class Board extends JComponent implements Runnable {
 	public static boolean gameOn;
 	public static Player currentPlayer;
 	public static Player white, black;
+	public boolean animationRunning = false;
 	
 	public Board() {
+		
 		setBackground(Color.darkGray);
 		setFocusable(true);
+		
+		initialize();
 		start();
 	}
 
+	public void initialize() {
+		whitePieces = new ArrayList<>();
+		blackPieces = new ArrayList<>();
+		
+		String[][] config = {
+				{"r","n","b","q","k","b","n","r"},
+				{"p","p","p","p","p","p","p","p"},
+				{" "," "," "," "," "," "," "," "},
+				{" "," "," "," "," "," "," "," "},
+				{" "," "," "," "," "," "," "," "},
+				{" "," "," "," "," "," "," "," "},
+				{"P","P","P","P","P","P","P","P"},
+				{"R","N","B","Q","K","B","N","R"}
+		};
 
+		board = loadBoard(config);
+		for (Piece piece : whitePieces) {
+			piece.updatePossibleMoves();
+		}
+		for(Piece piece : blackPieces) {
+			piece.updatePossibleMoves();
+		}
+		white = new Player(Team.WHITE, whitePieces);
+		black = new Player(Team.BLACK, blackPieces);
+		
+		gameOn = true;
+		currentPlayer = white;
+	}
+	
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
 		
+		repaint();
+		
 	}
 	
 	public void start() {
-		
+		if(!animationRunning) {
+			System.out.println("Animation loop started.");
+			Thread animProcess = new Thread(this);
+			animProcess.start();
+			animationRunning = true;
+		}
+	}
+	
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
 	}
 	
 	public static void main(String[] args) {

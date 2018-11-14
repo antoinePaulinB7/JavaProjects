@@ -81,9 +81,15 @@ public class Board extends JComponent implements Runnable {
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D)g;
 		
-		g2d.setColor(Color.black);
-		g2d.fillRect(0, 0, 100, 100);
+		g2d.setColor(Color.darkGray);
+		g2d.fillRect(0, 0, getWidth(), getHeight());
 		
+		drawBoard(g2d);
+		
+	}
+	
+	public void drawBoard(Graphics2D g2d) {
+		g2d.setColor(Color.white);
 	}
 	
 	public static void main(String[] args) {

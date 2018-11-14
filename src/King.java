@@ -109,9 +109,9 @@ public class King extends Piece {
 		// TODO Auto-generated method stub
 		switch(getTeam()) {
 		case WHITE :
-			return "K";
+			return (char)9812+"";
 		case BLACK :
-			return "k";
+			return (char)9818+"";
 		default :
 			return "K";
 		}

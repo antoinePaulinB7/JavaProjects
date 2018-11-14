@@ -93,9 +93,9 @@ public class Rook extends Piece {
 		// TODO Auto-generated method stub
 		switch(getTeam()) {
 		case WHITE :
-			return "R";
+			return (char)9814+"";
 		case BLACK :
-			return "r";
+			return (char)9820+"";
 		default :
 			return "R";
 		}

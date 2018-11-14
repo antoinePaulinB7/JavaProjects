@@ -33,7 +33,7 @@ public class Tile {
 	
 	@Override
 	public String toString() {
-		if(isOccupied()) return piece+"";
-		else return " ";
-	}
+		if(isOccupied()) return " "+piece+"    ";
+		else return "    ";
+	} 
 }

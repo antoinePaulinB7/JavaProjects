@@ -116,9 +116,9 @@ public class Queen extends Piece {
 		// TODO Auto-generated method stub
 		switch(getTeam()) {
 		case WHITE :
-			return "Q";
+			return (char)9813+"";
 		case BLACK :
-			return "q";
+			return (char)9819+"";
 		default :
 			return "Q";
 		}

@@ -66,9 +66,9 @@ public class Pawn extends Piece{
 		// TODO Auto-generated method stub
 		switch(getTeam()) {
 		case WHITE :
-			return "P";
+			return (char)9817+"";
 		case BLACK :
-			return "p";
+			return (char)9823+"";
 		default :
 			return "P";
 		}

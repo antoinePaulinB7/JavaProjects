@@ -41,12 +41,14 @@ public class Board extends JComponent implements Runnable {
 		};
 
 		board = loadBoard(config);
+		
 		for (Piece piece : whitePieces) {
 			piece.updatePossibleMoves();
 		}
 		for(Piece piece : blackPieces) {
 			piece.updatePossibleMoves();
 		}
+		
 		white = new Player(Team.WHITE, whitePieces);
 		black = new Player(Team.BLACK, blackPieces);
 		
@@ -90,6 +92,19 @@ public class Board extends JComponent implements Runnable {
 	
 	public void drawBoard(Graphics2D g2d) {
 		g2d.setColor(Color.white);
+		
+		int width = board.length;
+		int height = board[0].length;
+		
+		int xW = getWidth()/width;
+		int yH = getHeight()/height;
+		
+		for(int i = 0; i < width; i++) {
+			for(int j = 0; j < height; j++) {
+				if((i+j)%2==0)g2d.fillRect(i*xW, j*yH, xW, yH);
+			}
+		}
+		
 	}
 	
 	public static void main(String[] args) {

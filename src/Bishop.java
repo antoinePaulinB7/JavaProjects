@@ -91,9 +91,9 @@ public class Bishop extends Piece{
 		// TODO Auto-generated method stub
 		switch(getTeam()) {
 		case WHITE :
-			return (char)9815+"";
+			return "B";
 		case BLACK :
-			return (char)9821+"";
+			return "b";
 		default :
 			return "B";
 		}

@@ -98,9 +98,9 @@ public class Knight extends Piece{
 		// TODO Auto-generated method stub
 		switch(getTeam()) {
 		case WHITE :
-			return (char)9816+"";
+			return "N";
 		case BLACK :
-			return (char)9822+"";
+			return "n";
 		default :
 			return "N";
 		}

@@ -4,6 +4,7 @@ import javax.swing.JComponent;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.util.ArrayList;
 
 public class Board extends JComponent implements Runnable {
@@ -59,6 +60,12 @@ public class Board extends JComponent implements Runnable {
 		
 		repaint();
 		
+		try {
+			Thread.sleep((long)(1000/60));
+		}catch(InterruptedException e) {
+			System.out.println("Error encountered during the animation sleep.");
+		}
+		
 	}
 	
 	public void start() {
@@ -72,6 +79,11 @@ public class Board extends JComponent implements Runnable {
 	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		Graphics2D g2d = (Graphics2D)g;
+		
+		g2d.setColor(Color.black);
+		g2d.fillRect(0, 0, 100, 100);
+		
 	}
 	
 	public static void main(String[] args) {

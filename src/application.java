@@ -42,13 +42,9 @@ public class application {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		JPanel panel = new JPanel();
-		panel.setBounds(12, 0, 426, 251);
-		frame.getContentPane().add(panel);
-		
 		board = new Board();
-		
-		
+		board.setBounds(0,0,400,400);
+		frame.getContentPane().add(board);
 	}
 
 }

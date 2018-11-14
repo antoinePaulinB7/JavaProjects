@@ -22,7 +22,7 @@ public class Pawn extends Piece{
 			if(Board.getTile(getCoordinate().up())!=null
 			&&!Board.getTile(getCoordinate().up()).isOccupied()) {
 				moves.add(getCoordinate().up()+"");
-				if(getCoordinate().getRank()==2
+				if(getFirstMove()
 				&&Board.getTile(getCoordinate().up().up())!=null
 				&&!Board.getTile(getCoordinate().up().up()).isOccupied()) {
 					moves.add(getCoordinate().up().up()+"");
@@ -41,7 +41,7 @@ public class Pawn extends Piece{
 			if(Board.getTile(getCoordinate().down())!=null
 			&&!Board.getTile(getCoordinate().down()).isOccupied()) {
 				moves.add(getCoordinate().down()+"");
-				if(getCoordinate().getRank()==7
+				if(getFirstMove()
 				&&Board.getTile(getCoordinate().down().down())!=null
 				&&!Board.getTile(getCoordinate().down().down()).isOccupied()) {
 					moves.add(getCoordinate().down().down()+"");

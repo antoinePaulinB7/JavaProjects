@@ -3,22 +3,33 @@ import java.util.ArrayList;
 public abstract class Piece {
 	private Team team;
 	private Coordinate coordinate;
+	private boolean firstMove;
+	private ArrayList<String>possibleMoves;
+	private ArrayList<String>legalMoves;
 
 	public Piece(Team team, Coordinate coordinate) {
 		this.team = team;
 		this.coordinate = coordinate;
+		this.firstMove = true;
 	};
 
 	public abstract ArrayList<String> possibleMoves();
 
+	public void updatePossibleMoves() {
+		possibleMoves = possibleMoves();
+	}
+	
+	public void updateLegalMoves() {
+		legalMoves = legalMoves();
+	}
+	
 	public ArrayList<String> legalMoves(){
-		ArrayList<String> pMoves = this.possibleMoves();
-		ArrayList<String> lMoves = new ArrayList<>(pMoves.size());
+		ArrayList<String> lMoves = new ArrayList<>(possibleMoves.size());
 
 		int file, rank;
 
-		for(int i = 0; i < pMoves.size(); i++) {
-			String temp = pMoves.get(i);
+		for(int i = 0; i < possibleMoves.size(); i++) {
+			String temp = possibleMoves.get(i);
 			file = temp.charAt(0)-'a';
 			rank = temp.charAt(1)-49;
 
@@ -38,6 +49,8 @@ public abstract class Piece {
 		setCoordinate(coordinate);
 		Board.getTile(coordinate).setPiece(this);
 
+		if(firstMove) setFirstMove(false);
+		
 		Board.win(team);
 	}
 
@@ -107,8 +120,24 @@ public abstract class Piece {
 	public Coordinate getCoordinate() {
 		return coordinate;
 	};
+	
+	public boolean getFirstMove() {
+		return firstMove;
+	};
+	
+	public ArrayList<String> getPossibleMoves(){
+		return possibleMoves;
+	};
+	
+	public ArrayList<String> getLegalMoves(){
+		return legalMoves;
+	};
 
 	public void setCoordinate(Coordinate coordinate) {
 		this.coordinate = coordinate;
+	};
+	
+	public void setFirstMove(boolean value) {
+		this.firstMove = value;
 	};
 }

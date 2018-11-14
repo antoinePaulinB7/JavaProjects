@@ -6,14 +6,16 @@ public class Board {
 	public static Scanner in;
 	public static ArrayList<Piece> whitePieces, blackPieces;
 	public static boolean gameOn;
-	public static Team currentTeam;
+	public static Player currentPlayer;
+	public static Player white, black;
 
 	public static void main(String[] args) {
 		in = new Scanner(System.in);
 
 		whitePieces = new ArrayList<>();
 		blackPieces = new ArrayList<>();
-
+		
+//		Game board
 		String[][] config = {
 				{"r","n","b","q","k","b","n","r"},
 				{"p","p","p","p","p","p","p","p"},
@@ -25,16 +27,42 @@ public class Board {
 				{"R","N","B","Q","K","B","N","R"}
 		};
 
+//		Test board
+//		String[][] config = {
+//				{"r"," "," "," ","k"," "," ","r"},
+//				{"p","p","p"," ","p"," ","p","p"},
+//				{" "," "," "," "," "," "," "," "},
+//				{" "," "," "," "," "," "," "," "},
+//				{" "," "," "," "," "," "," "," "},
+//				{" "," "," "," "," "," "," "," "},
+//				{"P","P","P"," ","P"," ","P","P"},
+//				{"R"," "," ","Q","K","Q"," ","R"}
+//		};
+
 		board = loadBoard(config);
+		for (Piece piece : whitePieces) {
+			piece.updatePossibleMoves();
+		}
+		for(Piece piece : blackPieces) {
+			piece.updatePossibleMoves();
+		}
+		white = new Player(Team.WHITE, whitePieces);
+		black = new Player(Team.BLACK, blackPieces);
+		
 		gameOn = true;
-		currentTeam = Team.WHITE;
+		currentPlayer = white;
 
 		while(gameOn) {
-
+			
+			currentPlayer.updatePossibleMoves();
+			currentPlayer.updateLegalMoves();
 			show();
 
-			selectPiece(currentTeam);
-			currentTeam = currentTeam == Team.WHITE ? Team.BLACK : Team.WHITE;
+			selectPiece(currentPlayer.getTeam());
+
+			currentPlayer.updatePossibleMoves();
+			currentPlayer.updateControlledTiles();
+			currentPlayer = currentPlayer.getTeam() == Team.WHITE ? black : white;
 		}
 
 		in.close();
@@ -43,7 +71,20 @@ public class Board {
 
 
 	public static void selectPiece(Team team) {
-		System.out.print("Select a "+team+" piece:");
+		System.out.println("Select a "+team+" piece:");
+		
+		switch(team) {
+		case WHITE:
+			for(Piece piece : whitePieces) {
+				System.out.println(piece+" "+piece.getLegalMoves());
+			}
+			break;
+		case BLACK:
+			for(Piece piece : blackPieces) {
+				System.out.println(piece+" "+piece.getLegalMoves());
+			}
+			break;
+		}
 
 		Piece temp = null;
 		String selectedPiece;
@@ -96,18 +137,27 @@ public class Board {
 		String nextMove = "";
 		int file, rank;
 
-		System.out.print(piece+" chosen. Pick a move : "+piece.legalMoves());
+		System.out.print(piece+" chosen. Pick a move : "+piece.getLegalMoves());
 		nextMove = in.next();
 
-		file = nextMove.charAt(0)-'a';
-		rank = nextMove.charAt(1)-49;
-
-		Coordinate coordinate = new Coordinate(file,rank);
-
-		if(piece.testMoveTo(coordinate)) {
-			piece.moveTo(coordinate);
+		if(nextMove.equals("O--O")&&piece.getPossibleMoves().contains("O--O")) {
+			piece.moveTo(new Coordinate('c',piece.getCoordinate().getRank()));
+			getTile(new Coordinate('a',piece.getCoordinate().getRank())).getPiece().moveTo(new Coordinate('d',piece.getCoordinate().getRank()));
+		}else if(nextMove.equals("O-O")&&piece.getPossibleMoves().contains("O-O")){
+			piece.moveTo(new Coordinate('g',piece.getCoordinate().getRank()));
+			getTile(new Coordinate('h',piece.getCoordinate().getRank())).getPiece().moveTo(new Coordinate('f',piece.getCoordinate().getRank()));
 		}else {
-			selectPiece(piece.getTeam());
+
+			file = nextMove.charAt(0)-'a';
+			rank = nextMove.charAt(1)-49;
+
+			Coordinate coordinate = new Coordinate(file,rank);
+
+			if(piece.testMoveTo(coordinate)) {
+				piece.moveTo(coordinate);
+			}else {
+				selectPiece(piece.getTeam());
+			}
 		}
 	}
 
@@ -144,10 +194,7 @@ public class Board {
 			}
 			//System.out.println("white king at:"+target);
 
-			for(int i = 0; i < blackPieces.size(); i++) {
-				//System.out.println(blackPieces.get(i)+""+blackPieces.get(i).legalMoves());
-				if(blackPieces.get(i).possibleMoves().contains(target+"")) return true;
-			}
+			if(black.getControlledTiles().contains(getTile(new Coordinate(target.getFile(),target.getRank())))) return true;
 
 			return false;
 
@@ -160,11 +207,7 @@ public class Board {
 			}
 			//System.out.println("black king at:"+target);
 
-			for(int i = 0; i < whitePieces.size(); i++) {
-				//System.out.println(whitePieces.get(i)+""+whitePieces.get(i).legalMoves());
-				if(whitePieces.get(i).possibleMoves().contains(target+"")) return true;
-
-			}
+			if(white.getControlledTiles().contains(getTile(new Coordinate(target.getFile(),target.getRank())))) return true;
 
 			return false;
 		default :
@@ -183,9 +226,9 @@ public class Board {
 			if(Board.kingInCheck(Team.BLACK)) {
 				checkmate = true;
 				//System.out.println("Black king is in check.");
-				for(int i = 0; i < Board.blackPieces.size(); i++) {
+				for(int i = 0; i < blackPieces.size(); i++) {
 					//System.out.println(Board.blackPieces.get(i)+""+Board.blackPieces.get(i).legalMoves());
-					if(!Board.blackPieces.get(i).legalMoves().isEmpty()) {
+					if(!blackPieces.get(i).legalMoves().isEmpty()) {
 						checkmate = false;
 					}
 				}
@@ -194,8 +237,8 @@ public class Board {
 		case BLACK:
 			if(Board.kingInCheck(Team.WHITE)) {
 				checkmate = true;
-				for(int i = 0; i < Board.whitePieces.size(); i++) {
-					if(!Board.whitePieces.get(i).legalMoves().isEmpty()) {
+				for(int i = 0; i < whitePieces.size(); i++) {
+					if(!whitePieces.get(i).legalMoves().isEmpty()) {
 						checkmate = false;
 					}
 				}

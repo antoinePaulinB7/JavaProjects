@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 
 public class King extends Piece {
+	private boolean canCastleLong, canCastleShort;
 
 	public King(Team team, Coordinate coordinate) {
 		super(team, coordinate);
@@ -18,6 +19,8 @@ public class King extends Piece {
 	public ArrayList<String> possibleMoves() {
 		ArrayList<String> moves = new ArrayList<>();
 		Coordinate temp;
+
+		boolean localCheckTest = false;
 
 		switch(getTeam()) {
 
@@ -59,6 +62,68 @@ public class King extends Piece {
 				}
 
 			}
+
+			temp = new Coordinate(getCoordinate().getFile(),getCoordinate().getRank());
+
+			try{
+				if(Board.black.controls(temp)) localCheckTest = true;
+
+
+				//check long and short castle
+				if(getFirstMove() && !localCheckTest){
+
+					if(Board.getTile(new Coordinate('a',1)).getPiece().getFirstMove()) canCastleLong = true;
+
+					if(canCastleLong) {
+
+						for(int i = 3; i > 0; i--) {
+							temp = temp.left();
+							if(!Board.getTile(temp).isOccupied()) {
+								if(i>1) {
+									if(Board.black.controls(temp)) {
+										canCastleLong = false;
+										break;
+									}
+								}
+							}else {
+								canCastleLong = false;
+								break;
+							}
+						}
+
+						if(canCastleLong) {
+							System.out.println("white king can castle long");
+							moves.add("O--O");
+						}
+					}
+
+					if(Board.getTile(new Coordinate('h',1)).getPiece().getFirstMove()) canCastleShort = true;
+
+					if(canCastleShort) {
+						temp = new Coordinate(getCoordinate().getFile(),getCoordinate().getRank());
+
+						for(int i = 2; i > 0; i--) {
+							temp = temp.right();
+							if(!Board.getTile(temp).isOccupied()) {
+								if(Board.black.controls(temp)) {
+									canCastleLong = false;
+									break;
+								}
+							}else {
+								canCastleShort = false;
+								break;
+							}
+						}
+
+						if(canCastleShort) {
+							System.out.println("white king can castle short");
+							moves.add("O-O");
+						}
+					}
+				}
+			}catch(NullPointerException e) {
+
+			}
 			break;
 		case BLACK :
 			for(int j = 1; j <= 8; j++) {
@@ -93,15 +158,92 @@ public class King extends Piece {
 				}
 
 				if(Board.getTile(temp)!=null
-				&&!Board.getTile(temp).isOccupiedByBlack()) {
+						&&!Board.getTile(temp).isOccupiedByBlack()) {
 					moves.add(temp+"");
 				}
 
 			}
-			break;
+			temp = new Coordinate(getCoordinate().getFile(),getCoordinate().getRank());
+
+			try{
+				if(Board.white.controls(temp)) localCheckTest = true;
+
+
+				//check long and short castle
+				if(getFirstMove() && !localCheckTest){
+
+					if(Board.getTile(new Coordinate('a',8)).getPiece().getFirstMove()) canCastleLong = true;
+
+					if(canCastleLong) {
+
+						for(int i = 3; i > 0; i--) {
+							temp = temp.left();
+							if(!Board.getTile(temp).isOccupied()) {
+								if(i>1) {
+									if(Board.white.controls(temp)) {
+										canCastleLong = false;
+										break;
+									}
+								}
+							}else {
+								canCastleLong = false;
+								break;
+							}
+						}
+
+						if(canCastleLong) {
+							System.out.println("black king can castle long");
+							moves.add("O--O");
+						}
+					}
+
+					if(Board.getTile(new Coordinate('h',8)).getPiece().getFirstMove()) canCastleShort = true;
+
+					if(canCastleShort) {
+						temp = new Coordinate(getCoordinate().getFile(),getCoordinate().getRank());
+
+						for(int i = 2; i > 0; i--) {
+							temp = temp.right();
+							if(!Board.getTile(temp).isOccupied()) {
+								if(Board.white.controls(temp)) {
+									canCastleShort = false;
+									break;
+								}
+
+							}else {
+								canCastleShort = false;
+								break;
+							}
+						}
+
+						if(canCastleShort) {
+							System.out.println("black king can castle short");
+							moves.add("O-O");
+						}
+					}
+				}
+				break;
+			}catch(NullPointerException e) {
+
+			}
 		}
 
 		return moves;
+	}
+
+	@Override
+	public ArrayList<String> legalMoves(){
+		ArrayList<String> lMoves = super.legalMoves();
+
+		if(getPossibleMoves().contains("O--O")) {
+			lMoves.add("O--O");
+		}
+
+		if(getPossibleMoves().contains("O-O")) {
+			lMoves.add("O-O");
+		}
+
+		return lMoves;
 	}
 
 	@Override

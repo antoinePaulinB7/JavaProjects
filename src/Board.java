@@ -1,14 +1,35 @@
 import java.util.Scanner;
+
+import javax.swing.JComponent;
+
+import java.awt.Color;
 import java.util.ArrayList;
 
-public class Board {
+public class Board extends JComponent implements Runnable {
 	public static Tile[][] board;
 	public static Scanner in;
 	public static ArrayList<Piece> whitePieces, blackPieces;
 	public static boolean gameOn;
 	public static Player currentPlayer;
 	public static Player white, black;
+	
+	public Board() {
+		setBackground(Color.darkGray);
+		setFocusable(true);
+		start();
+	}
 
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public void start() {
+		
+	}
+	
 	public static void main(String[] args) {
 		in = new Scanner(System.in);
 
@@ -56,7 +77,7 @@ public class Board {
 			
 			currentPlayer.updatePossibleMoves();
 			currentPlayer.updateLegalMoves();
-			show();
+			showInConsole();
 
 			selectPiece(currentPlayer.getTeam());
 
@@ -161,7 +182,7 @@ public class Board {
 		}
 	}
 
-	public static void show() {
+	public static void showInConsole() {
 		System.out.println("   - - - - - - - -");
 		for(int i = board.length-1; i >= 0; i--) {
 			System.out.print(i+1+" |");
@@ -255,7 +276,7 @@ public class Board {
 
 	public static void gameOver() {
 		gameOn = false;
-		show();
+		showInConsole();
 	}
 
 	public static Tile[][] loadBoard(String[][]config){

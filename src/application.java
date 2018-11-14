@@ -7,6 +7,7 @@ import java.awt.BorderLayout;
 public class application {
 
 	private JFrame frame;
+	public Board board;
 
 	/**
 	 * Launch the application.
@@ -44,6 +45,10 @@ public class application {
 		JPanel panel = new JPanel();
 		panel.setBounds(12, 0, 426, 251);
 		frame.getContentPane().add(panel);
+		
+		board = new Board();
+		
+		
 	}
 
 }

@@ -86,8 +86,8 @@ public abstract class Piece extends JComponent implements Drawable {
 		Piece deadPiece = null;
 		Coordinate oldCoordinate = new Coordinate(getCoordinate().getFile(),getCoordinate().getRank());
 		boolean moveIsPossible = false;
-
-		if(possibleMoves().contains(coordinate+"")) {
+		
+		if(possibleMoves.contains(coordinate+"")) {
 			moveIsPossible = true;
 
 			if(Board.getTile(coordinate).isOccupied()) {
@@ -100,6 +100,13 @@ public abstract class Piece extends JComponent implements Drawable {
 
 			//System.out.println(Board.kingInCheck(team));
 
+			switch(getTeam()) {
+			case WHITE : Board.black.updateControlledTiles();
+			break;
+			case BLACK : Board.white.updateControlledTiles();
+			break;
+			}
+			
 			if(Board.kingInCheck(team)) {
 				System.out.println("Can't let your King get checked.");
 				//Board.show();
@@ -119,6 +126,13 @@ public abstract class Piece extends JComponent implements Drawable {
 			}
 			Board.getTile(coordinate).setPiece(deadPiece);
 			Board.getTile(getCoordinate()).setPiece(this);
+			
+			switch(getTeam()) {
+			case WHITE : Board.black.updateControlledTiles();
+			break;
+			case BLACK : Board.white.updateControlledTiles();
+			break;
+			}
 		}
 
 		return moveIsPossible;

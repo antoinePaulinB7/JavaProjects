@@ -8,6 +8,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.awt.event.MouseMotionAdapter;
+import java.awt.geom.Ellipse2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
 
@@ -24,7 +25,9 @@ public class Board extends JComponent implements Runnable {
 	public static int files = 8;
 	public static int ranks = 8;
 	public static int xW = 1, yH = 1;
+	public static int tileX = 0, tileY = 0;
 	public State state = State.SELECT;
+	public Piece targetPiece = null;
 
 	public enum State {
 		SELECT,MOVE;
@@ -35,8 +38,22 @@ public class Board extends JComponent implements Runnable {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if(state == State.SELECT) {
-					//if()
-					state = State.MOVE;
+					mouseSelect();
+
+					if(targetPiece!=null) {
+						state = State.MOVE;
+						System.out.println("Found a piece! "+targetPiece);
+					}
+				}else {
+					if(mouseMovePiece()) {
+
+						currentPlayer.updatePossibleMoves();
+						currentPlayer.updateLegalMoves();
+						currentPlayer.updateControlledTiles();
+						
+						changeTurn();
+					}
+					state = State.SELECT;
 				}
 			}
 		});
@@ -45,9 +62,12 @@ public class Board extends JComponent implements Runnable {
 			public void mouseMoved(MouseEvent e) {
 				mouseX = e.getX();
 				mouseY = getHeight()-e.getY();
-				
+
 				xW = getWidth()/files;
 				yH = getHeight()/ranks;
+
+				tileX = mouseX/xW;
+				tileY = mouseY/yH;
 			}
 		});
 
@@ -74,7 +94,7 @@ public class Board extends JComponent implements Runnable {
 		};
 
 		board = loadBoard(config);
-		
+
 		files = board.length;
 		ranks = board[0].length;
 
@@ -98,7 +118,7 @@ public class Board extends JComponent implements Runnable {
 		while(animationRunning) {
 
 			repaint();
-
+			
 			try {
 				Thread.sleep((long)(1000/60));
 			}catch(InterruptedException e) {
@@ -116,17 +136,23 @@ public class Board extends JComponent implements Runnable {
 			animationRunning = true;
 		}
 	}
+	
+	public void changeTurn() {
+		currentPlayer = currentPlayer.getTeam() == Team.WHITE ? black : white;
+		currentPlayer.updatePossibleMoves();
+		currentPlayer.updateLegalMoves();
+	}
 
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D)g;
 		g2d.scale(1, -1);
 		g2d.translate(0, -getHeight());
-		
+
 
 		g2d.setColor(Color.darkGray);
 		g2d.fillRect(0, 0, getWidth(), getHeight());
-		
+
 		drawBoard(g2d);
 		drawUnderlay(g2d);
 		drawPieces(g2d);
@@ -146,13 +172,26 @@ public class Board extends JComponent implements Runnable {
 
 	public void drawUnderlay(Graphics2D g2d) {
 		g2d.setColor(Color.black);
-		g2d.setStroke(new BasicStroke(4F));
+		g2d.setStroke(new BasicStroke(3F));
 
 		if(state == State.SELECT) {
-			selectX = mouseX/xW;
-			selectY = mouseY/yH;
+			selectX = tileX;
+			selectY = tileY;
 		}
 
+		if(state == State.MOVE) {
+			g2d.setColor(Color.lightGray);
+			for(String move : targetPiece.legalMoves()) {
+				int file, rank;
+
+				file = move.charAt(0)-'a';
+				rank = move.charAt(1)-49;
+
+				g2d.fill(new Ellipse2D.Double(file*xW+18,rank*yH+18,14,14));
+				//g2d.drawRect(file*xW, rank*yH, xW, yH);
+			}
+			g2d.setColor(Color.black);
+		}
 
 		g2d.drawRect(selectX*xW, selectY*yH, xW, yH);
 
@@ -162,7 +201,7 @@ public class Board extends JComponent implements Runnable {
 
 		int x = getWidth()/files;
 		int y = getHeight()/ranks;
-		
+
 		switch(currentPlayer.getTeam()) {
 		case WHITE:
 			g2d.scale(1, -1);
@@ -247,7 +286,49 @@ public class Board extends JComponent implements Runnable {
 		in.close();
 	}
 
+	public void mouseSelect() {
+		Coordinate tempCoord = new Coordinate(tileX,tileY);
+		targetPiece = null;
+		if(getTile(tempCoord)!=null) {
 
+			switch(currentPlayer.getTeam()) {
+			case WHITE :
+				if(getTile(tempCoord).isOccupiedByWhite()
+						&&!getTile(tempCoord).getPiece().legalMoves().isEmpty()) {
+					targetPiece = getTile(tempCoord).getPiece();
+				}
+				break;
+			case BLACK :
+				if(getTile(tempCoord).isOccupiedByBlack()
+						&&!getTile(tempCoord).getPiece().legalMoves().isEmpty()) {
+					targetPiece = getTile(tempCoord).getPiece();
+				}
+				break;
+			}
+			if(targetPiece==null) System.out.println("Selection not valid. Please enter a valid piece: ");
+		}else {
+			System.out.println("Tile not valid. Please enter a valid tile: ");
+		}
+	}
+	
+	public boolean mouseMovePiece() {
+		Coordinate targetCoordinate = new Coordinate(tileX,tileY);
+
+//		if(nextMove.equals("O--O")&&targetPiece.getPossibleMoves().contains("O--O")) {
+//			targetPiece.moveTo(new Coordinate('c',targetPiece.getCoordinate().getRank()));
+//			getTile(new Coordinate('a',targetPiece.getCoordinate().getRank())).getPiece().moveTo(new Coordinate('d',targetPiece.getCoordinate().getRank()));
+//		}else if(nextMove.equals("O-O")&&targetPiece.getPossibleMoves().contains("O-O")){
+//			targetPiece.moveTo(new Coordinate('g',targetPiece.getCoordinate().getRank()));
+//			getTile(new Coordinate('h',targetPiece.getCoordinate().getRank())).getPiece().moveTo(new Coordinate('f',targetPiece.getCoordinate().getRank()));
+//		}else {
+
+			if(targetPiece.testMoveTo(targetCoordinate)) {
+				targetPiece.moveTo(targetCoordinate);
+				return true;
+			}
+			return false;
+//		}
+	}
 
 	public static void selectPiece(Team team) {
 		System.out.println("Select a "+team+" piece:");

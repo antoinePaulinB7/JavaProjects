@@ -31,13 +31,14 @@ public abstract class Piece extends JComponent implements Drawable {
 		int width = application.board.getWidth();
 		int height = application.board.getHeight();
 		
-		int xW = Board.board.length;
-		int yH = Board.board[0].length;
+		int x = width/Board.files;
+		int y = height/Board.ranks;
 		
-		int x = width/xW;
-		int y = height/yH;
-		
-		if(image!=null)image.paintIcon(this, g, coordinate.getFileIndex()*x, coordinate.getRankIndex()*y);
+		if(image!=null) {
+			Graphics2D g2d = (Graphics2D) g;
+			g2d.scale(1, -1);
+			image.paintIcon(this, g2d, coordinate.getFileIndex()*x, coordinate.getRankIndex()*y);
+		}
 	}
 	
 	public abstract ArrayList<String> possibleMoves();

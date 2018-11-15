@@ -9,6 +9,7 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseAdapter;
 
 public class Board extends JComponent implements Runnable {
 	public static Tile[][] board;
@@ -19,13 +20,34 @@ public class Board extends JComponent implements Runnable {
 	public static Player white, black;
 	public boolean animationRunning = false;
 	public int mouseX = 0, mouseY = 0;
+	public int selectX = 0, selectY = 0;
+	public static int files = 8;
+	public static int ranks = 8;
+	public static int xW = 1, yH = 1;
+	public State state = State.SELECT;
+
+	public enum State {
+		SELECT,MOVE;
+	}
 
 	public Board() {
+		addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(state == State.SELECT) {
+					//if()
+					state = State.MOVE;
+				}
+			}
+		});
 		addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseMoved(MouseEvent e) {
 				mouseX = e.getX();
-				mouseY = e.getY();
+				mouseY = getHeight()-e.getY();
+				
+				xW = getWidth()/files;
+				yH = getHeight()/ranks;
 			}
 		});
 
@@ -52,6 +74,9 @@ public class Board extends JComponent implements Runnable {
 		};
 
 		board = loadBoard(config);
+		
+		files = board.length;
+		ranks = board[0].length;
 
 		for (Piece piece : whitePieces) {
 			piece.updatePossibleMoves();
@@ -71,7 +96,7 @@ public class Board extends JComponent implements Runnable {
 	public void run() {
 		// TODO Auto-generated method stub
 		while(animationRunning) {
-			
+
 			repaint();
 
 			try {
@@ -95,10 +120,13 @@ public class Board extends JComponent implements Runnable {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D)g;
+		g2d.scale(1, -1);
+		g2d.translate(0, -getHeight());
+		
 
 		g2d.setColor(Color.darkGray);
 		g2d.fillRect(0, 0, getWidth(), getHeight());
-
+		
 		drawBoard(g2d);
 		drawUnderlay(g2d);
 		drawPieces(g2d);
@@ -108,14 +136,8 @@ public class Board extends JComponent implements Runnable {
 	public void drawBoard(Graphics2D g2d) {
 		g2d.setColor(Color.white);
 
-		int width = board.length;
-		int height = board[0].length;
-
-		int xW = getWidth()/width;
-		int yH = getHeight()/height;
-
-		for(int i = 0; i < width; i++) {
-			for(int j = 0; j < height; j++) {
+		for(int i = 0; i < files; i++) {
+			for(int j = 0; j < ranks; j++) {
 				if((i+j)%2==0)g2d.fillRect(i*xW, j*yH, xW, yH);
 			}
 		}
@@ -126,40 +148,41 @@ public class Board extends JComponent implements Runnable {
 		g2d.setColor(Color.black);
 		g2d.setStroke(new BasicStroke(4F));
 
-		int width = board.length;
-		int height = board[0].length;
+		if(state == State.SELECT) {
+			selectX = mouseX/xW;
+			selectY = mouseY/yH;
+		}
 
-		int xW = getWidth()/width;
-		int yH = getHeight()/height;
 
-		int x = mouseX/xW;
-		int y = mouseY/yH;
-
-		g2d.drawRect(x*xW, y*yH, xW, yH);
+		g2d.drawRect(selectX*xW, selectY*yH, xW, yH);
 
 	}
-	
+
 	public void drawPieces(Graphics2D g2d) {
 		switch(currentPlayer.getTeam()) {
 		case WHITE:
-			
+
 			for(Piece piece : blackPieces) {
-				piece.draw(g2d);
+				//piece.draw(g2d);
+				g2d.drawImage(piece.image.getImage(),0,0,null);
 			}
 			for(Piece piece : whitePieces) {
-				piece.draw(g2d);
+				//piece.draw(g2d);
+				g2d.drawImage(piece.image.getImage(),0,0,null);
 			}
 			break;
 		case BLACK:
-			
+
 			for(Piece piece : whitePieces) {
-				piece.draw(g2d);
+				//piece.draw(g2d);
+				g2d.drawImage(piece.image.getImage(),0,0,null);
 			}
 			for(Piece piece : blackPieces) {
-				piece.draw(g2d);
+				//piece.draw(g2d);
+				g2d.drawImage(piece.image.getImage(),0,0,null);
 			}
 			break;
-			
+
 		}
 	}
 

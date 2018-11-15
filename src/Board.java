@@ -2,6 +2,7 @@ import java.util.Scanner;
 
 import javax.swing.JComponent;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -18,7 +19,7 @@ public class Board extends JComponent implements Runnable {
 	public static Player white, black;
 	public boolean animationRunning = false;
 	public int mouseX = 0, mouseY = 0;
-	
+
 	public Board() {
 		addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
@@ -27,10 +28,10 @@ public class Board extends JComponent implements Runnable {
 				mouseY = e.getY();
 			}
 		});
-		
+
 		setBackground(Color.darkGray);
 		setFocusable(true);
-		
+
 		initialize();
 		start();
 	}
@@ -38,7 +39,7 @@ public class Board extends JComponent implements Runnable {
 	public void initialize() {
 		whitePieces = new ArrayList<>();
 		blackPieces = new ArrayList<>();
-		
+
 		String[][] config = {
 				{"r","n","b","q","k","b","n","r"},
 				{"p","p","p","p","p","p","p","p"},
@@ -51,35 +52,37 @@ public class Board extends JComponent implements Runnable {
 		};
 
 		board = loadBoard(config);
-		
+
 		for (Piece piece : whitePieces) {
 			piece.updatePossibleMoves();
 		}
 		for(Piece piece : blackPieces) {
 			piece.updatePossibleMoves();
 		}
-		
+
 		white = new Player(Team.WHITE, whitePieces);
 		black = new Player(Team.BLACK, blackPieces);
-		
+
 		gameOn = true;
 		currentPlayer = white;
 	}
-	
+
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		
-		repaint();
-		
-		try {
-			Thread.sleep((long)(1000/60));
-		}catch(InterruptedException e) {
-			System.out.println("Error encountered during the animation sleep.");
+		while(animationRunning) {
+			
+			repaint();
+
+			try {
+				Thread.sleep((long)(1000/60));
+			}catch(InterruptedException e) {
+				System.out.println("Error encountered during the animation sleep.");
+			}
 		}
-		
+
 	}
-	
+
 	public void start() {
 		if(!animationRunning) {
 			System.out.println("Animation loop started.");
@@ -88,57 +91,60 @@ public class Board extends JComponent implements Runnable {
 			animationRunning = true;
 		}
 	}
-	
+
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D)g;
-		
+
 		g2d.setColor(Color.darkGray);
 		g2d.fillRect(0, 0, getWidth(), getHeight());
-		
+
 		drawBoard(g2d);
 		drawUnderlay(g2d);
-		
+
 	}
-	
+
 	public void drawBoard(Graphics2D g2d) {
 		g2d.setColor(Color.white);
-		
+
 		int width = board.length;
 		int height = board[0].length;
-		
+
 		int xW = getWidth()/width;
 		int yH = getHeight()/height;
-		
+
 		for(int i = 0; i < width; i++) {
 			for(int j = 0; j < height; j++) {
 				if((i+j)%2==0)g2d.fillRect(i*xW, j*yH, xW, yH);
 			}
 		}
-		
+
 	}
-	
+
 	public void drawUnderlay(Graphics2D g2d) {
 		g2d.setColor(Color.black);
-		
+		g2d.setStroke(new BasicStroke(4F));
+
 		int width = board.length;
 		int height = board[0].length;
-		
+
 		int xW = getWidth()/width;
 		int yH = getHeight()/height;
-		
+
 		int x = mouseX/xW;
 		int y = mouseY/yH;
-		
+
+		g2d.drawRect(x*xW, y*yH, xW, yH);
+
 	}
-	
+
 	public static void main(String[] args) {
 		in = new Scanner(System.in);
 
 		whitePieces = new ArrayList<>();
 		blackPieces = new ArrayList<>();
-		
-//		Game board
+
+		//		Game board
 		String[][] config = {
 				{"r","n","b","q","k","b","n","r"},
 				{"p","p","p","p","p","p","p","p"},
@@ -150,17 +156,17 @@ public class Board extends JComponent implements Runnable {
 				{"R","N","B","Q","K","B","N","R"}
 		};
 
-//		Test board
-//		String[][] config = {
-//				{"r"," "," "," ","k"," "," ","r"},
-//				{"p","p","p"," ","p"," ","p","p"},
-//				{" "," "," "," "," "," "," "," "},
-//				{" "," "," "," "," "," "," "," "},
-//				{" "," "," "," "," "," "," "," "},
-//				{" "," "," "," "," "," "," "," "},
-//				{"P","P","P"," ","P"," ","P","P"},
-//				{"R"," "," ","Q","K","Q"," ","R"}
-//		};
+		//		Test board
+		//		String[][] config = {
+		//				{"r"," "," "," ","k"," "," ","r"},
+		//				{"p","p","p"," ","p"," ","p","p"},
+		//				{" "," "," "," "," "," "," "," "},
+		//				{" "," "," "," "," "," "," "," "},
+		//				{" "," "," "," "," "," "," "," "},
+		//				{" "," "," "," "," "," "," "," "},
+		//				{"P","P","P"," ","P"," ","P","P"},
+		//				{"R"," "," ","Q","K","Q"," ","R"}
+		//		};
 
 		board = loadBoard(config);
 		for (Piece piece : whitePieces) {
@@ -171,12 +177,12 @@ public class Board extends JComponent implements Runnable {
 		}
 		white = new Player(Team.WHITE, whitePieces);
 		black = new Player(Team.BLACK, blackPieces);
-		
+
 		gameOn = true;
 		currentPlayer = white;
 
 		while(gameOn) {
-			
+
 			currentPlayer.updatePossibleMoves();
 			currentPlayer.updateLegalMoves();
 			showInConsole();
@@ -195,7 +201,7 @@ public class Board extends JComponent implements Runnable {
 
 	public static void selectPiece(Team team) {
 		System.out.println("Select a "+team+" piece:");
-		
+
 		switch(team) {
 		case WHITE:
 			for(Piece piece : whitePieces) {

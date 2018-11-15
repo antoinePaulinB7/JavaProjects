@@ -156,6 +156,7 @@ public class Board extends JComponent implements Runnable {
 		drawBoard(g2d);
 		drawUnderlay(g2d);
 		drawPieces(g2d);
+		drawOverlay(g2d);
 
 	}
 
@@ -177,20 +178,6 @@ public class Board extends JComponent implements Runnable {
 		if(state == State.SELECT) {
 			selectX = tileX;
 			selectY = tileY;
-		}
-
-		if(state == State.MOVE) {
-			g2d.setColor(Color.lightGray);
-			for(String move : targetPiece.legalMoves()) {
-				int file, rank;
-
-				file = move.charAt(0)-'a';
-				rank = move.charAt(1)-49;
-
-				g2d.fill(new Ellipse2D.Double(file*xW+18,rank*yH+18,14,14));
-				//g2d.drawRect(file*xW, rank*yH, xW, yH);
-			}
-			g2d.setColor(Color.black);
 		}
 
 		g2d.drawRect(selectX*xW, selectY*yH, xW, yH);
@@ -224,6 +211,22 @@ public class Board extends JComponent implements Runnable {
 			g2d.scale(1, -1);
 			break;
 
+		}
+	}
+	
+	public void drawOverlay(Graphics2D g2d) {
+		if(state == State.MOVE) {
+			g2d.setColor(Color.lightGray);
+			for(String move : targetPiece.legalMoves()) {
+				int file, rank;
+
+				file = move.charAt(0)-'a';
+				rank = move.charAt(1)-49;
+
+				g2d.fill(new Ellipse2D.Double(file*xW+18,rank*yH+18,14,14));
+				//g2d.drawRect(file*xW, rank*yH, xW, yH);
+			}
+			g2d.setColor(Color.black);
 		}
 	}
 

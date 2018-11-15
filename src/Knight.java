@@ -1,3 +1,4 @@
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -135,8 +136,8 @@ public class Knight extends Piece{
 	}
 	
 	@Override
-	public void draw(Graphics2D g2d) {
+	public void draw(Graphics g) {
 		// TODO Auto-generated method stub
-		
+		super.draw(g);
 	}
 }

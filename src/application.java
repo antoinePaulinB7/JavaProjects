@@ -7,7 +7,7 @@ import java.awt.BorderLayout;
 public class application {
 
 	private JFrame frame;
-	public Board board;
+	public static Board board;
 
 	/**
 	 * Launch the application.

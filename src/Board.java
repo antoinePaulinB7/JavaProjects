@@ -140,7 +140,27 @@ public class Board extends JComponent implements Runnable {
 	}
 	
 	public void drawPieces(Graphics2D g2d) {
-		
+		switch(currentPlayer.getTeam()) {
+		case WHITE:
+			
+			for(Piece piece : blackPieces) {
+				piece.draw(g2d);
+			}
+			for(Piece piece : whitePieces) {
+				piece.draw(g2d);
+			}
+			break;
+		case BLACK:
+			
+			for(Piece piece : whitePieces) {
+				piece.draw(g2d);
+			}
+			for(Piece piece : blackPieces) {
+				piece.draw(g2d);
+			}
+			break;
+			
+		}
 	}
 
 	public static void main(String[] args) {

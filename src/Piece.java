@@ -1,3 +1,4 @@
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -5,7 +6,11 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 
-public abstract class Piece implements Drawable {
+public abstract class Piece extends JComponent implements Drawable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6163315931953633666L;
 	private Team team;
 	private Coordinate coordinate;
 	private boolean firstMove;
@@ -19,6 +24,20 @@ public abstract class Piece implements Drawable {
 		this.firstMove = true;
 	};
 
+	public abstract void loadImage();
+	
+	public void draw(Graphics g) {
+		int width = application.board.getWidth();
+		int height = application.board.getHeight();
+		
+		int xW = Board.board.length;
+		int yH = Board.board[0].length;
+		
+		
+		
+		if(image!=null)image.paintIcon(this, g, coordinate.getFileIndex()*xW, coordinate.getRankIndex()*yH);
+	}
+	
 	public abstract ArrayList<String> possibleMoves();
 
 	public void updatePossibleMoves() {

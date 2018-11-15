@@ -9,6 +9,7 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.geom.Ellipse2D;
+import java.awt.image.BufferedImage;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
 
@@ -28,6 +29,8 @@ public class Board extends JComponent implements Runnable {
 	public static int tileX = 0, tileY = 0;
 	public State state = State.SELECT;
 	public Piece targetPiece = null;
+	public BufferedImage background;
+	public static int width, height;
 
 	public enum State {
 		SELECT,MOVE;
@@ -110,6 +113,14 @@ public class Board extends JComponent implements Runnable {
 
 		gameOn = true;
 		currentPlayer = white;
+		
+		width = 400;
+		height = 400;
+		
+		xW = width/files;
+		yH = height/ranks;
+		
+		background = Utils.makeBackground();
 	}
 
 	@Override
@@ -161,14 +172,9 @@ public class Board extends JComponent implements Runnable {
 	}
 
 	public void drawBoard(Graphics2D g2d) {
-		g2d.setColor(Color.white);
-
-		for(int i = 0; i < files; i++) {
-			for(int j = 0; j < ranks; j++) {
-				if((i+j)%2==0)g2d.fillRect(i*xW, j*yH, xW, yH);
-			}
-		}
-
+		g2d.scale(1, -1);
+		g2d.drawImage(background, 0, -height, null);
+		g2d.scale(1, -1);
 	}
 
 	public void drawUnderlay(Graphics2D g2d) {

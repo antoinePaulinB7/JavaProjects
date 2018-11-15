@@ -1,5 +1,6 @@
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -16,7 +17,7 @@ public abstract class Piece extends JComponent implements Drawable {
 	private boolean firstMove;
 	private ArrayList<String>possibleMoves;
 	private ArrayList<String>legalMoves;
-	protected ImageIcon image;
+	protected ImageIcon image = null;
 
 	public Piece(Team team, Coordinate coordinate) {
 		this.team = team;
@@ -33,9 +34,10 @@ public abstract class Piece extends JComponent implements Drawable {
 		int xW = Board.board.length;
 		int yH = Board.board[0].length;
 		
+		int x = width/xW;
+		int y = height/yH;
 		
-		
-		if(image!=null)image.paintIcon(this, g, coordinate.getFileIndex()*xW, coordinate.getRankIndex()*yH);
+		if(image!=null)image.paintIcon(this, g, coordinate.getFileIndex()*x, coordinate.getRankIndex()*y);
 	}
 	
 	public abstract ArrayList<String> possibleMoves();

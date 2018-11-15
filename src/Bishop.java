@@ -1,5 +1,7 @@
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -127,6 +129,8 @@ public class Bishop extends Piece{
 			System.out.println("Couldn't load the bishop's image");
 			e.printStackTrace();
 		}
+		
+		image = new ImageIcon(Utils.getScaledImage(image.getImage(), 50, 50));
 		
 	}
 	

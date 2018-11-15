@@ -20,6 +20,7 @@ public class Knight extends Piece{
 			Board.blackPieces.add(this);
 			break;
 		}
+		loadImage();
 	}
 
 	@Override
@@ -132,6 +133,8 @@ public class Knight extends Piece{
 			System.out.println("Couldn't load the knight's image");
 			e.printStackTrace();
 		}
+		
+		image = new ImageIcon(Utils.getScaledImage(image.getImage(), 50, 50));
 		
 	}
 	

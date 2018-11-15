@@ -20,6 +20,7 @@ public class Queen extends Piece {
 			Board.blackPieces.add(this);
 			break;
 		}
+		loadImage();
 	}
 
 	@Override
@@ -151,12 +152,16 @@ public class Queen extends Piece {
 			e.printStackTrace();
 		}
 		
+		image = new ImageIcon(Utils.getScaledImage(image.getImage(), 50, 50));
+		
 	}
 	
 	@Override
 	public void draw(Graphics g) {
 		// TODO Auto-generated method stub
 		super.draw(g);
+		
+		
 	}
 	
 }

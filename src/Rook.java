@@ -20,6 +20,7 @@ public class Rook extends Piece {
 			Board.blackPieces.add(this);
 			break;
 		}
+		loadImage();
 	}
 
 	@Override
@@ -127,6 +128,8 @@ public class Rook extends Piece {
 			System.out.println("Couldn't load the rook's image");
 			e.printStackTrace();
 		}
+		
+		image = new ImageIcon(Utils.getScaledImage(image.getImage(), 50, 50));
 		
 	}
 	

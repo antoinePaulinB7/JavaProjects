@@ -21,6 +21,7 @@ public class King extends Piece {
 			Board.blackPieces.add(this);
 			break;
 		}
+		loadImage();
 	}
 
 	@Override
@@ -285,6 +286,8 @@ public class King extends Piece {
 			System.out.println("Couldn't load the king's image");
 			e.printStackTrace();
 		}
+		
+		image = new ImageIcon(Utils.getScaledImage(image.getImage(), 50, 50));
 		
 	}
 	

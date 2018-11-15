@@ -6,6 +6,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseEvent;
 
 public class Board extends JComponent implements Runnable {
 	public static Tile[][] board;
@@ -15,8 +17,16 @@ public class Board extends JComponent implements Runnable {
 	public static Player currentPlayer;
 	public static Player white, black;
 	public boolean animationRunning = false;
+	public int mouseX = 0, mouseY = 0;
 	
 	public Board() {
+		addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				mouseX = e.getX();
+				mouseY = e.getY();
+			}
+		});
 		
 		setBackground(Color.darkGray);
 		setFocusable(true);
@@ -87,6 +97,7 @@ public class Board extends JComponent implements Runnable {
 		g2d.fillRect(0, 0, getWidth(), getHeight());
 		
 		drawBoard(g2d);
+		drawUnderlay(g2d);
 		
 	}
 	
@@ -104,6 +115,20 @@ public class Board extends JComponent implements Runnable {
 				if((i+j)%2==0)g2d.fillRect(i*xW, j*yH, xW, yH);
 			}
 		}
+		
+	}
+	
+	public void drawUnderlay(Graphics2D g2d) {
+		g2d.setColor(Color.black);
+		
+		int width = board.length;
+		int height = board[0].length;
+		
+		int xW = getWidth()/width;
+		int yH = getHeight()/height;
+		
+		int x = mouseX/xW;
+		int y = mouseY/yH;
 		
 	}
 	

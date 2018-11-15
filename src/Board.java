@@ -159,28 +159,30 @@ public class Board extends JComponent implements Runnable {
 	}
 
 	public void drawPieces(Graphics2D g2d) {
+
+		int x = getWidth()/files;
+		int y = getHeight()/ranks;
+		
 		switch(currentPlayer.getTeam()) {
 		case WHITE:
-
+			g2d.scale(1, -1);
 			for(Piece piece : blackPieces) {
-				//piece.draw(g2d);
-				g2d.drawImage(piece.image.getImage(),0,0,null);
+				g2d.drawImage(piece.image.getImage(),piece.getCoordinate().getFileIndex()*x,-50-y*piece.getCoordinate().getRankIndex(),null);
 			}
 			for(Piece piece : whitePieces) {
-				//piece.draw(g2d);
-				g2d.drawImage(piece.image.getImage(),0,0,null);
+				g2d.drawImage(piece.image.getImage(),piece.getCoordinate().getFileIndex()*x,-50-y*piece.getCoordinate().getRankIndex(),null);
 			}
+			g2d.scale(1, -1);
 			break;
 		case BLACK:
-
+			g2d.scale(1, -1);
 			for(Piece piece : whitePieces) {
-				//piece.draw(g2d);
-				g2d.drawImage(piece.image.getImage(),0,0,null);
+				g2d.drawImage(piece.image.getImage(),piece.getCoordinate().getFileIndex()*x,-50-y*piece.getCoordinate().getRankIndex(),null);
 			}
 			for(Piece piece : blackPieces) {
-				//piece.draw(g2d);
-				g2d.drawImage(piece.image.getImage(),0,0,null);
+				g2d.drawImage(piece.image.getImage(),piece.getCoordinate().getFileIndex()*x,-50-y*piece.getCoordinate().getRankIndex(),null);
 			}
+			g2d.scale(1, -1);
 			break;
 
 		}

@@ -1,4 +1,6 @@
+import java.awt.Graphics2D;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -117,14 +119,24 @@ public class Knight extends Piece{
 		String team = getTeam() == Team.WHITE ? "white" : "black";
 		String fileName = team+"_knight.png";
 		
-		URL url = getClass().getClassLoader().getResource(fileName);
-		
+		URL url;
 		try {
+			url = getClass().getResource(fileName);
 			image = new ImageIcon(ImageIO.read(url));
-		}catch (IOException e) {
+		} catch (MalformedURLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			System.out.println("Couldn't load the knight's image");
+			e.printStackTrace();
 		}
 		
 	}
-
+	
+	@Override
+	public void draw(Graphics2D g2d) {
+		// TODO Auto-generated method stub
+		
+	}
 }

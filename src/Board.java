@@ -101,6 +101,7 @@ public class Board extends JComponent implements Runnable {
 
 		drawBoard(g2d);
 		drawUnderlay(g2d);
+		drawPieces(g2d);
 
 	}
 
@@ -136,6 +137,10 @@ public class Board extends JComponent implements Runnable {
 
 		g2d.drawRect(x*xW, y*yH, xW, yH);
 
+	}
+	
+	public void drawPieces(Graphics2D g2d) {
+		
 	}
 
 	public static void main(String[] args) {

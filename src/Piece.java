@@ -1,5 +1,8 @@
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 
 public abstract class Piece implements Drawable {
@@ -8,6 +11,7 @@ public abstract class Piece implements Drawable {
 	private boolean firstMove;
 	private ArrayList<String>possibleMoves;
 	private ArrayList<String>legalMoves;
+	protected ImageIcon image;
 
 	public Piece(Team team, Coordinate coordinate) {
 		this.team = team;

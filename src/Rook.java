@@ -1,4 +1,9 @@
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
 public class Rook extends Piece {
 
@@ -99,6 +104,22 @@ public class Rook extends Piece {
 		default :
 			return "R";
 		}
+	}
+	
+	@Override
+	public void loadImage() {
+		// TODO Auto-generated method stub
+		String team = getTeam() == Team.WHITE ? "white" : "black";
+		String fileName = team+"_rook.png";
+		
+		URL url = getClass().getClassLoader().getResource(fileName);
+		
+		try {
+			image = new ImageIcon(ImageIO.read(url));
+		}catch (IOException e) {
+			System.out.println("Couldn't load the rook's image");
+		}
+		
 	}
 
 }

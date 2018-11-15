@@ -1,4 +1,11 @@
+import java.awt.Graphics2D;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
 public class Bishop extends Piece{
 
@@ -12,6 +19,7 @@ public class Bishop extends Piece{
 			Board.blackPieces.add(this);
 			break;
 		}
+		loadImage();
 	}
 
 	@Override
@@ -98,5 +106,34 @@ public class Bishop extends Piece{
 			return "B";
 		}
 	}
+
+
+	@Override
+	public void loadImage() {
+		// TODO Auto-generated method stub
+		String team = getTeam() == Team.WHITE ? "white" : "black";
+		String fileName = team+"_bishop.png";
+		
+		URL url;
+		try {
+			url = getClass().getResource(fileName);
+			image = new ImageIcon(ImageIO.read(url));
+		} catch (MalformedURLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Couldn't load the bishop's image");
+			e.printStackTrace();
+		}
+		
+	}
+	
+	@Override
+	public void draw(Graphics2D g2d) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 }

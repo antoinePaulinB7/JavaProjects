@@ -1,4 +1,9 @@
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
 public class King extends Piece {
 	private boolean canCastleLong, canCastleShort;
@@ -257,6 +262,22 @@ public class King extends Piece {
 		default :
 			return "K";
 		}
+	}
+	
+	@Override
+	public void loadImage() {
+		// TODO Auto-generated method stub
+		String team = getTeam() == Team.WHITE ? "white" : "black";
+		String fileName = team+"_king.png";
+		
+		URL url = getClass().getClassLoader().getResource(fileName);
+		
+		try {
+			image = new ImageIcon(ImageIO.read(url));
+		}catch (IOException e) {
+			System.out.println("Couldn't load the king's image");
+		}
+		
 	}
 
 }

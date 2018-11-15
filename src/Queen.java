@@ -1,4 +1,9 @@
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
 public class Queen extends Piece {
 
@@ -124,4 +129,20 @@ public class Queen extends Piece {
 		}
 	}
 
+	@Override
+	public void loadImage() {
+		// TODO Auto-generated method stub
+		String team = getTeam() == Team.WHITE ? "white" : "black";
+		String fileName = team+"_queen.png";
+		
+		URL url = getClass().getClassLoader().getResource(fileName);
+		
+		try {
+			image = new ImageIcon(ImageIO.read(url));
+		}catch (IOException e) {
+			System.out.println("Couldn't load the queen's image");
+		}
+		
+	}
+	
 }

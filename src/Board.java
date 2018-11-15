@@ -328,7 +328,7 @@ public class Board extends JComponent implements Runnable {
 			}
 			//System.out.println("white king at:"+target);
 
-			if(black.getControlledTiles().contains(getTile(new Coordinate(target.getFile(),target.getRank())))) return true;
+			if(black.controls(target)) return true;
 
 			return false;
 
@@ -341,7 +341,7 @@ public class Board extends JComponent implements Runnable {
 			}
 			//System.out.println("black king at:"+target);
 
-			if(white.getControlledTiles().contains(getTile(new Coordinate(target.getFile(),target.getRank())))) return true;
+			if(white.controls(target)) return true;
 
 			return false;
 		default :

@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 
-public abstract class Piece {
+import javax.swing.JComponent;
+
+public abstract class Piece implements Drawable {
 	private Team team;
 	private Coordinate coordinate;
 	private boolean firstMove;

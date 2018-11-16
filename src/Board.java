@@ -237,68 +237,77 @@ public class Board extends JComponent implements Runnable {
 				g2d.fill(new Ellipse2D.Double(file*xW+18,rank*yH+18,14,14));
 				//g2d.drawRect(file*xW, rank*yH, xW, yH);
 			}
+
+			if(targetPiece.getLegalMoves().contains("O-O")) {
+				g2d.fill(new Ellipse2D.Double(6*xW+18,targetPiece.getCoordinate().getRankIndex()*yH+18,14,14));
+			}
+
+			if(targetPiece.getLegalMoves().contains("O--O")) {
+				g2d.fill(new Ellipse2D.Double(2*xW+18,targetPiece.getCoordinate().getRankIndex()*yH+18,14,14));
+			}
+
 			g2d.setColor(Color.black);
 		}
 	}
 
-//	public static void main(String[] args) {
-//		in = new Scanner(System.in);
-//
-//		whitePieces = new ArrayList<>();
-//		blackPieces = new ArrayList<>();
-//
-//		//		Game board
-//		String[][] config = {
-//				{"r","n","b","q","k","b","n","r"},
-//				{"p","p","p","p","p","p","p","p"},
-//				{" "," "," "," "," "," "," "," "},
-//				{" "," "," "," "," "," "," "," "},
-//				{" "," "," "," "," "," "," "," "},
-//				{" "," "," "," "," "," "," "," "},
-//				{"P","P","P","P","P","P","P","P"},
-//				{"R","N","B","Q","K","B","N","R"}
-//		};
-//
-//		//		Test board
-//		//		String[][] config = {
-//		//				{"r"," "," "," ","k"," "," ","r"},
-//		//				{"p","p","p"," ","p"," ","p","p"},
-//		//				{" "," "," "," "," "," "," "," "},
-//		//				{" "," "," "," "," "," "," "," "},
-//		//				{" "," "," "," "," "," "," "," "},
-//		//				{" "," "," "," "," "," "," "," "},
-//		//				{"P","P","P"," ","P"," ","P","P"},
-//		//				{"R"," "," ","Q","K","Q"," ","R"}
-//		//		};
-//
-//		board = loadBoard(config);
-//		for (Piece piece : whitePieces) {
-//			piece.updatePossibleMoves();
-//		}
-//		for(Piece piece : blackPieces) {
-//			piece.updatePossibleMoves();
-//		}
-//		white = new Player(Team.WHITE, whitePieces);
-//		black = new Player(Team.BLACK, blackPieces);
-//
-//		gameOn = true;
-//		currentPlayer = white;
-//
-////		while(gameOn) {
-////
-////			currentPlayer.updatePossibleMoves();
-////			currentPlayer.updateLegalMoves();
-////			showInConsole();
-////
-////			selectPiece(currentPlayer.getTeam());
-////
-////			currentPlayer.updatePossibleMoves();
-////			currentPlayer.updateControlledTiles();
-////			currentPlayer = currentPlayer.getTeam() == Team.WHITE ? black : white;
-////		}
-//
-//		in.close();
-//	}
+	//	public static void main(String[] args) {
+	//		in = new Scanner(System.in);
+	//
+	//		whitePieces = new ArrayList<>();
+	//		blackPieces = new ArrayList<>();
+	//
+	//		//		Game board
+	//		String[][] config = {
+	//				{"r","n","b","q","k","b","n","r"},
+	//				{"p","p","p","p","p","p","p","p"},
+	//				{" "," "," "," "," "," "," "," "},
+	//				{" "," "," "," "," "," "," "," "},
+	//				{" "," "," "," "," "," "," "," "},
+	//				{" "," "," "," "," "," "," "," "},
+	//				{"P","P","P","P","P","P","P","P"},
+	//				{"R","N","B","Q","K","B","N","R"}
+	//		};
+	//
+	//		//		Test board
+	//		//		String[][] config = {
+	//		//				{"r"," "," "," ","k"," "," ","r"},
+	//		//				{"p","p","p"," ","p"," ","p","p"},
+	//		//				{" "," "," "," "," "," "," "," "},
+	//		//				{" "," "," "," "," "," "," "," "},
+	//		//				{" "," "," "," "," "," "," "," "},
+	//		//				{" "," "," "," "," "," "," "," "},
+	//		//				{"P","P","P"," ","P"," ","P","P"},
+	//		//				{"R"," "," ","Q","K","Q"," ","R"}
+	//		//		};
+	//
+	//		board = loadBoard(config);
+	//		for (Piece piece : whitePieces) {
+	//			piece.updatePossibleMoves();
+	//		}
+	//		for(Piece piece : blackPieces) {
+	//			piece.updatePossibleMoves();
+	//		}
+	//		white = new Player(Team.WHITE, whitePieces);
+	//		black = new Player(Team.BLACK, blackPieces);
+	//
+	//		gameOn = true;
+	//		currentPlayer = white;
+	//
+	////		while(gameOn) {
+	////
+	////			currentPlayer.updatePossibleMoves();
+	////			currentPlayer.updateLegalMoves();
+	////			showInConsole();
+	////
+	////			selectPiece(currentPlayer.getTeam());
+	////
+	////			currentPlayer.updatePossibleMoves();
+	////			currentPlayer.updateControlledTiles();
+	////			currentPlayer = currentPlayer.getTeam() == Team.WHITE ? black : white;
+	////		}
+	//
+	//		in.close();
+	//	}
 
 	public void mouseSelect() {
 		Coordinate tempCoord = new Coordinate(tileX,tileY);
@@ -328,7 +337,21 @@ public class Board extends JComponent implements Runnable {
 	public boolean mouseMovePiece() {
 		Coordinate targetCoordinate = new Coordinate(tileX,tileY);
 
-		if(targetPiece.testMoveTo(targetCoordinate)) {
+		if((tileX==2&&tileY==0&&currentPlayer.getTeam()==Team.WHITE||
+				tileX==2&&tileY==7&&currentPlayer.getTeam()==Team.BLACK)&&
+				targetPiece.getClass()==King.class&&
+				targetPiece.getPossibleMoves().contains("O--O")) {
+			targetPiece.moveTo(new Coordinate('c',targetPiece.getCoordinate().getRank()));
+			getTile(new Coordinate('a',targetPiece.getCoordinate().getRank())).getPiece().moveTo(new Coordinate('d',targetPiece.getCoordinate().getRank()));
+			return true;
+		}else if((tileX==6&&tileY==0&&currentPlayer.getTeam()==Team.WHITE||
+				tileX==6&&tileY==7&&currentPlayer.getTeam()==Team.BLACK)&&
+				targetPiece.getClass()==King.class&&
+				targetPiece.getPossibleMoves().contains("O-O")) {
+			targetPiece.moveTo(new Coordinate('g',targetPiece.getCoordinate().getRank()));
+			getTile(new Coordinate('h',targetPiece.getCoordinate().getRank())).getPiece().moveTo(new Coordinate('f',targetPiece.getCoordinate().getRank()));
+			return true;
+		}else if(targetPiece.testMoveTo(targetCoordinate)) {
 			targetPiece.moveTo(targetCoordinate);
 			return true;
 		}

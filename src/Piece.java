@@ -77,7 +77,10 @@ public abstract class Piece extends JComponent implements Drawable {
 		setCoordinate(coordinate);
 		Board.getTile(coordinate).setPiece(this);
 
-		if(firstMove) setFirstMove(false);
+		if(firstMove) {
+			setFirstMove(false);
+			System.out.println("firstMove now false");
+		}
 	}
 
 	public boolean testMoveTo(Coordinate coordinate) {

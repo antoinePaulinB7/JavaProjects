@@ -81,6 +81,7 @@ public class King extends Piece {
 				//check long and short castle
 				if(getFirstMove() && !localCheckTest){
 
+					canCastleLong = false;
 					if(Board.getTile(new Coordinate('a',1)).getPiece().getFirstMove()) canCastleLong = true;
 
 					if(canCastleLong) {
@@ -106,6 +107,7 @@ public class King extends Piece {
 						}
 					}
 
+					canCastleShort = false;
 					if(Board.getTile(new Coordinate('h',1)).getPiece().getFirstMove()) canCastleShort = true;
 
 					if(canCastleShort) {
@@ -181,6 +183,7 @@ public class King extends Piece {
 				//check long and short castle
 				if(getFirstMove() && !localCheckTest){
 
+					canCastleLong = false;
 					if(Board.getTile(new Coordinate('a',8)).getPiece().getFirstMove()) canCastleLong = true;
 
 					if(canCastleLong) {
@@ -206,6 +209,7 @@ public class King extends Piece {
 						}
 					}
 
+					canCastleShort = false;
 					if(Board.getTile(new Coordinate('h',8)).getPiece().getFirstMove()) canCastleShort = true;
 
 					if(canCastleShort) {

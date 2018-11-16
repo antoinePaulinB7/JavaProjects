@@ -17,7 +17,7 @@ public class Player {
 		Set<Tile> temp = new HashSet<Tile>();
 		int file, rank;
 		for(Piece piece : pieces) {
-			ArrayList<String> pieceMoves = piece.getPossibleMoves();
+			ArrayList<String> pieceMoves = piece.getLegalMoves();
 			for(String move : pieceMoves) {
 				file = move.charAt(0)-'a';
 				rank = move.charAt(1)-49;
@@ -66,6 +66,15 @@ public class Player {
 
 	public Set<Tile> getControlledTiles(){
 		return controlledTiles;
+	}
+	
+	@Override
+	public String toString() {
+		String temp = "";
+		for(Piece piece : pieces) {
+			temp+=piece+""+piece.getPossibleMoves()+"\n";
+		}
+		return temp;
 	}
 
 }

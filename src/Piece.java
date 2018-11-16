@@ -99,24 +99,21 @@ public abstract class Piece extends JComponent implements Drawable {
 			Board.getTile(coordinate).setPiece(this);
 
 			//System.out.println(Board.kingInCheck(team));
-
-//			switch(getTeam()) {
-//			case WHITE : Board.black.updateControlledTiles();
-//			break;
-//			case BLACK : Board.white.updateControlledTiles();
-//			break;
-//			}
-			
-			//Board.white.updateControlledTiles();
-			//Board.black.updateControlledTiles();
+			try {
+				switch(getTeam()) {
+				case WHITE : Board.black.updateControlledTiles();
+				break;
+				case BLACK : Board.white.updateControlledTiles();
+				break;
+				}
+			}catch(NullPointerException e) {
+				System.out.println("Couldn't update boards");
+			}
 
 			if(Board.kingInCheck(team)) {
-				System.out.println("Can't let your King get checked.");
-				//Board.show();
-
 				moveIsPossible=false;
-
 			}
+
 			setCoordinate(oldCoordinate);
 			if(deadPiece!=null) {
 				switch(deadPiece.getTeam()){
@@ -130,15 +127,16 @@ public abstract class Piece extends JComponent implements Drawable {
 			Board.getTile(coordinate).setPiece(deadPiece);
 			Board.getTile(getCoordinate()).setPiece(this);
 
-//			switch(getTeam()) {
-//			case WHITE : Board.black.updateControlledTiles();
-//			break;
-//			case BLACK : Board.white.updateControlledTiles();
-//			break;
-//			}
-			
-			//Board.white.updateControlledTiles();
-			//Board.black.updateControlledTiles();
+			try {
+				switch(getTeam()) {
+				case WHITE : Board.black.updateControlledTiles();
+				break;
+				case BLACK : Board.white.updateControlledTiles();
+				break;
+				}
+			}catch(NullPointerException e) {
+				System.out.println("Couldn't update boards");
+			}
 		}
 
 		return moveIsPossible;
@@ -179,6 +177,7 @@ public abstract class Piece extends JComponent implements Drawable {
 	};
 
 	public ArrayList<String> getLegalMoves(){
+		if(possibleMoves==null)updatePossibleMoves();
 		if(legalMoves==null)updateLegalMoves();
 		return legalMoves;
 	};

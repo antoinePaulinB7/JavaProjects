@@ -55,10 +55,10 @@ public class Board extends JComponent implements Runnable {
 					}
 					state = State.SELECT;
 				}
-				
+
 				System.out.println(white);
 				System.out.println(black);
-				
+
 			}
 		});
 		addMouseMotionListener(new MouseMotionAdapter() {
@@ -114,13 +114,13 @@ public class Board extends JComponent implements Runnable {
 
 		gameOn = true;
 		currentPlayer = white;
-		
+
 		width = 400;
 		height = 400;
-		
+
 		xW = width/files;
 		yH = height/ranks;
-		
+
 		background = Utils.makeBackground();
 	}
 
@@ -130,7 +130,7 @@ public class Board extends JComponent implements Runnable {
 		while(animationRunning) {
 
 			repaint();
-			
+
 			try {
 				Thread.sleep((long)(1000/60));
 			}catch(InterruptedException e) {
@@ -148,7 +148,7 @@ public class Board extends JComponent implements Runnable {
 			animationRunning = true;
 		}
 	}
-	
+
 	public void changeTurn() {
 		currentPlayer.update();
 		currentPlayer = currentPlayer.getTeam() == Team.WHITE ? black : white;
@@ -220,7 +220,7 @@ public class Board extends JComponent implements Runnable {
 
 		}
 	}
-	
+
 	public void drawOverlay(Graphics2D g2d) {
 		if(state == State.MOVE) {
 			g2d.setColor(Color.lightGray);
@@ -320,24 +320,15 @@ public class Board extends JComponent implements Runnable {
 			System.out.println("Tile not valid. Please enter a valid tile: ");
 		}
 	}
-	
+
 	public boolean mouseMovePiece() {
 		Coordinate targetCoordinate = new Coordinate(tileX,tileY);
 
-//		if(nextMove.equals("O--O")&&targetPiece.getPossibleMoves().contains("O--O")) {
-//			targetPiece.moveTo(new Coordinate('c',targetPiece.getCoordinate().getRank()));
-//			getTile(new Coordinate('a',targetPiece.getCoordinate().getRank())).getPiece().moveTo(new Coordinate('d',targetPiece.getCoordinate().getRank()));
-//		}else if(nextMove.equals("O-O")&&targetPiece.getPossibleMoves().contains("O-O")){
-//			targetPiece.moveTo(new Coordinate('g',targetPiece.getCoordinate().getRank()));
-//			getTile(new Coordinate('h',targetPiece.getCoordinate().getRank())).getPiece().moveTo(new Coordinate('f',targetPiece.getCoordinate().getRank()));
-//		}else {
-
-			if(targetPiece.testMoveTo(targetCoordinate)) {
-				targetPiece.moveTo(targetCoordinate);
-				return true;
-			}
-			return false;
-//		}
+		if(targetPiece.testMoveTo(targetCoordinate)) {
+			targetPiece.moveTo(targetCoordinate);
+			return true;
+		}
+		return false;
 	}
 
 	public static void selectPiece(Team team) {
@@ -382,13 +373,13 @@ public class Board extends JComponent implements Runnable {
 				case WHITE :
 
 					if(getTile(tempCoord).isOccupiedByWhite()
-							&&!getTile(tempCoord).getPiece().legalMoves().isEmpty()) {
+							&&!getTile(tempCoord).getPiece().possibleMoves().isEmpty()) {
 						temp = getTile(tempCoord).getPiece();
 					}
 					break;
 				case BLACK :
 					if(getTile(tempCoord).isOccupiedByBlack()
-							&&!getTile(tempCoord).getPiece().legalMoves().isEmpty()) {
+							&&!getTile(tempCoord).getPiece().possibleMoves().isEmpty()) {
 						temp = getTile(tempCoord).getPiece();
 					}
 					break;
@@ -462,9 +453,12 @@ public class Board extends JComponent implements Runnable {
 					break;
 				}
 			}
-			//System.out.println("white king at:"+target);
 
-			if(black.controls(target)) return true;
+			try{
+				if(black.controls(target)) return true;
+			}catch(NullPointerException e) {
+				
+			}
 
 			return false;
 
@@ -475,10 +469,13 @@ public class Board extends JComponent implements Runnable {
 					break;
 				}
 			}
-			//System.out.println("black king at:"+target);
 
-			if(white.controls(target)) return true;
-
+			try{
+				if(white.controls(target)) return true;
+			}catch(NullPointerException e) {
+				
+			}
+			
 			return false;
 		default :
 			return false;

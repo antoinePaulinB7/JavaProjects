@@ -115,7 +115,7 @@ public class King extends Piece {
 							temp = temp.right();
 							if(!Board.getTile(temp).isOccupied()) {
 								if(Board.black.controls(temp)) {
-									canCastleLong = false;
+									canCastleShort = false;
 									break;
 								}
 							}else {

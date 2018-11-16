@@ -38,12 +38,12 @@ public class Player {
 			switch(team) {
 			case WHITE :
 				if(Board.black!=null&&Board.black.controls(piece.getCoordinate())){
-					value -= 3;
+					value -= piece.getValue()*2;
 				}
 				break;
 			case BLACK:
 				if(Board.white!=null&&Board.white.controls(piece.getCoordinate())) {
-					value -= 3;
+					value -= piece.getValue()*2;
 				}
 				break;
 			}

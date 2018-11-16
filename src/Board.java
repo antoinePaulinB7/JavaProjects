@@ -41,9 +41,8 @@ public class Board extends JComponent implements Runnable {
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				white.update();
-				black.update();
-				
+				System.out.println("Click.");
+
 				if(state == State.SELECT) {
 					mouseSelect();
 
@@ -60,6 +59,7 @@ public class Board extends JComponent implements Runnable {
 
 				System.out.println(white);
 				System.out.println(black);
+				System.out.println(updates);
 
 			}
 		});
@@ -129,17 +129,16 @@ public class Board extends JComponent implements Runnable {
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		while(animationRunning&&gameOn) {
-			
+		do{ 
+
 			repaint();
-			
-			System.out.println(updates);
+
 			try {
 				Thread.sleep((long)(1000/60));
 			}catch(InterruptedException e) {
 				System.out.println("Error encountered during the animation sleep.");
 			}
-		}
+		}while(animationRunning&&gameOn);
 
 	}
 
@@ -153,14 +152,12 @@ public class Board extends JComponent implements Runnable {
 	}
 
 	public void changeTurn() {
-		//currentPlayer.update();
 		white.update();
 		black.update();
-		
+
 		win(currentPlayer.getTeam());
-		
+
 		currentPlayer = currentPlayer.getTeam() == Team.WHITE ? black : white;
-		//currentPlayer.update();
 	}
 
 	public void paintComponent(Graphics g) {
@@ -231,7 +228,7 @@ public class Board extends JComponent implements Runnable {
 	public void drawOverlay(Graphics2D g2d) {
 		if(state == State.MOVE) {
 			g2d.setColor(Color.lightGray);
-			for(String move : targetPiece.legalMoves()) {
+			for(String move : targetPiece.getLegalMoves()) {
 				int file, rank;
 
 				file = move.charAt(0)-'a';
@@ -244,64 +241,64 @@ public class Board extends JComponent implements Runnable {
 		}
 	}
 
-	public static void main(String[] args) {
-		in = new Scanner(System.in);
-
-		whitePieces = new ArrayList<>();
-		blackPieces = new ArrayList<>();
-
-		//		Game board
-		String[][] config = {
-				{"r","n","b","q","k","b","n","r"},
-				{"p","p","p","p","p","p","p","p"},
-				{" "," "," "," "," "," "," "," "},
-				{" "," "," "," "," "," "," "," "},
-				{" "," "," "," "," "," "," "," "},
-				{" "," "," "," "," "," "," "," "},
-				{"P","P","P","P","P","P","P","P"},
-				{"R","N","B","Q","K","B","N","R"}
-		};
-
-		//		Test board
-		//		String[][] config = {
-		//				{"r"," "," "," ","k"," "," ","r"},
-		//				{"p","p","p"," ","p"," ","p","p"},
-		//				{" "," "," "," "," "," "," "," "},
-		//				{" "," "," "," "," "," "," "," "},
-		//				{" "," "," "," "," "," "," "," "},
-		//				{" "," "," "," "," "," "," "," "},
-		//				{"P","P","P"," ","P"," ","P","P"},
-		//				{"R"," "," ","Q","K","Q"," ","R"}
-		//		};
-
-		board = loadBoard(config);
-		for (Piece piece : whitePieces) {
-			piece.updatePossibleMoves();
-		}
-		for(Piece piece : blackPieces) {
-			piece.updatePossibleMoves();
-		}
-		white = new Player(Team.WHITE, whitePieces);
-		black = new Player(Team.BLACK, blackPieces);
-
-		gameOn = true;
-		currentPlayer = white;
-
-		while(gameOn) {
-
-			currentPlayer.updatePossibleMoves();
-			currentPlayer.updateLegalMoves();
-			showInConsole();
-
-			selectPiece(currentPlayer.getTeam());
-
-			currentPlayer.updatePossibleMoves();
-			currentPlayer.updateControlledTiles();
-			currentPlayer = currentPlayer.getTeam() == Team.WHITE ? black : white;
-		}
-
-		in.close();
-	}
+//	public static void main(String[] args) {
+//		in = new Scanner(System.in);
+//
+//		whitePieces = new ArrayList<>();
+//		blackPieces = new ArrayList<>();
+//
+//		//		Game board
+//		String[][] config = {
+//				{"r","n","b","q","k","b","n","r"},
+//				{"p","p","p","p","p","p","p","p"},
+//				{" "," "," "," "," "," "," "," "},
+//				{" "," "," "," "," "," "," "," "},
+//				{" "," "," "," "," "," "," "," "},
+//				{" "," "," "," "," "," "," "," "},
+//				{"P","P","P","P","P","P","P","P"},
+//				{"R","N","B","Q","K","B","N","R"}
+//		};
+//
+//		//		Test board
+//		//		String[][] config = {
+//		//				{"r"," "," "," ","k"," "," ","r"},
+//		//				{"p","p","p"," ","p"," ","p","p"},
+//		//				{" "," "," "," "," "," "," "," "},
+//		//				{" "," "," "," "," "," "," "," "},
+//		//				{" "," "," "," "," "," "," "," "},
+//		//				{" "," "," "," "," "," "," "," "},
+//		//				{"P","P","P"," ","P"," ","P","P"},
+//		//				{"R"," "," ","Q","K","Q"," ","R"}
+//		//		};
+//
+//		board = loadBoard(config);
+//		for (Piece piece : whitePieces) {
+//			piece.updatePossibleMoves();
+//		}
+//		for(Piece piece : blackPieces) {
+//			piece.updatePossibleMoves();
+//		}
+//		white = new Player(Team.WHITE, whitePieces);
+//		black = new Player(Team.BLACK, blackPieces);
+//
+//		gameOn = true;
+//		currentPlayer = white;
+//
+////		while(gameOn) {
+////
+////			currentPlayer.updatePossibleMoves();
+////			currentPlayer.updateLegalMoves();
+////			showInConsole();
+////
+////			selectPiece(currentPlayer.getTeam());
+////
+////			currentPlayer.updatePossibleMoves();
+////			currentPlayer.updateControlledTiles();
+////			currentPlayer = currentPlayer.getTeam() == Team.WHITE ? black : white;
+////		}
+//
+//		in.close();
+//	}
 
 	public void mouseSelect() {
 		Coordinate tempCoord = new Coordinate(tileX,tileY);
@@ -464,7 +461,7 @@ public class Board extends JComponent implements Runnable {
 			try{
 				if(black.controls(target)) return true;
 			}catch(NullPointerException e) {
-				
+
 			}
 
 			return false;
@@ -480,9 +477,9 @@ public class Board extends JComponent implements Runnable {
 			try{
 				if(white.controls(target)) return true;
 			}catch(NullPointerException e) {
-				
+
 			}
-			
+
 			return false;
 		default :
 			return false;

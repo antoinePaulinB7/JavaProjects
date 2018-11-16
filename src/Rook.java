@@ -20,6 +20,7 @@ public class Rook extends Piece {
 			Board.blackPieces.add(this);
 			break;
 		}
+		setValue(5);
 		loadImage();
 	}
 

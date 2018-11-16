@@ -14,6 +14,10 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
 
 public class Board extends JComponent implements Runnable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6270173937039310733L;
 	public static Tile[][] board;
 	public static Scanner in;
 	public static ArrayList<Piece> whitePieces, blackPieces;
@@ -60,6 +64,7 @@ public class Board extends JComponent implements Runnable {
 				System.out.println(white);
 				System.out.println(black);
 				System.out.println(updates);
+				System.out.println(white.getValue()-black.getValue());
 
 			}
 		});

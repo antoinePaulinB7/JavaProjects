@@ -6,11 +6,13 @@ public class Player {
 	private Team team;
 	private ArrayList<Piece> pieces;
 	private Set<Tile> controlledTiles;
+	private int value;
 
 	public Player(Team team, ArrayList<Piece> pieces) {
 		this.team = team;
 		this.pieces = pieces;
 		controlledTiles = calculateControlledTiles();
+		value = calculateValue();
 	}
 
 	public Set<Tile> calculateControlledTiles(){
@@ -28,6 +30,29 @@ public class Player {
 		return temp;
 	}
 
+	public int calculateValue() {
+		int value = 0;
+		for(Piece piece : pieces) {
+			value += piece.getValue();
+			value += piece.legalMoves().size();
+			switch(team) {
+			case WHITE :
+				if(Board.black!=null&&Board.black.controls(piece.getCoordinate())){
+					value -= 3;
+				}
+				break;
+			case BLACK:
+				if(Board.white!=null&&Board.white.controls(piece.getCoordinate())) {
+					value -= 3;
+				}
+				break;
+			}
+			//if(!controls(piece.getCoordinate()))value -= 1;
+		}
+		value += controlledTiles.size();
+		return value;
+	}
+
 	public boolean controls(Coordinate coordinate) {
 		return controlledTiles.contains(Board.getTile(coordinate));
 	}
@@ -36,6 +61,7 @@ public class Player {
 		updatePossibleMoves();
 		updateLegalMoves();
 		updateControlledTiles();
+		updateValue();
 	}
 
 	public void updatePossibleMoves() {
@@ -60,6 +86,10 @@ public class Player {
 		controlledTiles = calculateControlledTiles();
 	}
 
+	public void updateValue() {
+		value = calculateValue();
+	}
+
 	public Team getTeam() {
 		return team;
 	}
@@ -67,11 +97,15 @@ public class Player {
 	public Set<Tile> getControlledTiles(){
 		return controlledTiles;
 	}
-	
+
 	public ArrayList<Piece> getPieces(){
 		return pieces;
 	}
-	
+
+	public int getValue() {
+		return value;
+	}
+
 	@Override
 	public String toString() {
 		String temp = "";

@@ -20,6 +20,7 @@ public class Pawn extends Piece{
 			Board.blackPieces.add(this);
 			break;
 		}
+		setValue(1);
 		loadImage();
 	}
 

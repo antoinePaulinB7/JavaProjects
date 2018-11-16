@@ -17,6 +17,7 @@ public abstract class Piece extends JComponent implements Drawable {
 	private boolean firstMove;
 	private ArrayList<String>possibleMoves;
 	private ArrayList<String>legalMoves;
+	private int value;
 	protected ImageIcon image = null;
 
 	public Piece(Team team, Coordinate coordinate) {
@@ -171,6 +172,9 @@ public abstract class Piece extends JComponent implements Drawable {
 		return firstMove;
 	};
 
+	public int getValue() {
+		return value;
+	}
 	public ArrayList<String> getPossibleMoves(){
 		if(possibleMoves==null)updatePossibleMoves();
 		return possibleMoves;
@@ -189,4 +193,8 @@ public abstract class Piece extends JComponent implements Drawable {
 	public void setFirstMove(boolean value) {
 		this.firstMove = value;
 	};
+	
+	public void setValue(int value) {
+		this.value = value;
+	}
 }

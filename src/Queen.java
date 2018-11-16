@@ -20,6 +20,7 @@ public class Queen extends Piece {
 			Board.blackPieces.add(this);
 			break;
 		}
+		setValue(9);
 		loadImage();
 	}
 

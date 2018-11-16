@@ -20,6 +20,7 @@ public class Knight extends Piece{
 			Board.blackPieces.add(this);
 			break;
 		}
+		setValue(3);
 		loadImage();
 	}
 

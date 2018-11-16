@@ -21,6 +21,7 @@ public class King extends Piece {
 			Board.blackPieces.add(this);
 			break;
 		}
+		setValue(1000);
 		loadImage();
 	}
 

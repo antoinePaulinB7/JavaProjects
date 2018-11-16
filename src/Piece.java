@@ -78,8 +78,6 @@ public abstract class Piece extends JComponent implements Drawable {
 		Board.getTile(coordinate).setPiece(this);
 
 		if(firstMove) setFirstMove(false);
-
-		Board.win(team);
 	}
 
 	public boolean testMoveTo(Coordinate coordinate) {
@@ -98,7 +96,6 @@ public abstract class Piece extends JComponent implements Drawable {
 			setCoordinate(coordinate);
 			Board.getTile(coordinate).setPiece(this);
 
-			//System.out.println(Board.kingInCheck(team));
 			try {
 				switch(getTeam()) {
 				case WHITE : Board.black.updateControlledTiles();

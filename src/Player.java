@@ -17,7 +17,7 @@ public class Player {
 		Set<Tile> temp = new HashSet<Tile>();
 		int file, rank;
 		for(Piece piece : pieces) {
-			ArrayList<String> pieceMoves = piece.getLegalMoves();
+			ArrayList<String> pieceMoves = piece.possibleMoves();
 			for(String move : pieceMoves) {
 				file = move.charAt(0)-'a';
 				rank = move.charAt(1)-49;
@@ -55,8 +55,8 @@ public class Player {
 	}
 
 	public void updateControlledTiles() {
-
-		System.out.println("Updating controlled tiles for "+team);
+		Board.updates++;
+		//System.out.println("Updating controlled tiles for "+team);
 		controlledTiles = calculateControlledTiles();
 	}
 
@@ -68,11 +68,15 @@ public class Player {
 		return controlledTiles;
 	}
 	
+	public ArrayList<Piece> getPieces(){
+		return pieces;
+	}
+	
 	@Override
 	public String toString() {
 		String temp = "";
 		for(Piece piece : pieces) {
-			temp+=piece+""+piece.getPossibleMoves()+"\n";
+			temp+=piece+""+piece.getLegalMoves()+"\n";
 		}
 		return temp;
 	}

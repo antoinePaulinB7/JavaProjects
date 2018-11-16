@@ -31,6 +31,7 @@ public class Board extends JComponent implements Runnable {
 	public Piece targetPiece = null;
 	public BufferedImage background;
 	public static int width, height;
+	public static int updates = 0;
 
 	public enum State {
 		SELECT,MOVE;
@@ -42,6 +43,7 @@ public class Board extends JComponent implements Runnable {
 			public void mouseClicked(MouseEvent e) {
 				white.update();
 				black.update();
+				
 				if(state == State.SELECT) {
 					mouseSelect();
 
@@ -50,7 +52,7 @@ public class Board extends JComponent implements Runnable {
 						System.out.println("Found a piece! "+targetPiece);
 					}
 				}else {
-					if(mouseMovePiece()) {						
+					if(mouseMovePiece()) {		
 						changeTurn();
 					}
 					state = State.SELECT;
@@ -127,10 +129,11 @@ public class Board extends JComponent implements Runnable {
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		while(animationRunning) {
-
+		while(animationRunning&&gameOn) {
+			
 			repaint();
-
+			
+			System.out.println(updates);
 			try {
 				Thread.sleep((long)(1000/60));
 			}catch(InterruptedException e) {
@@ -150,9 +153,14 @@ public class Board extends JComponent implements Runnable {
 	}
 
 	public void changeTurn() {
-		currentPlayer.update();
+		//currentPlayer.update();
+		white.update();
+		black.update();
+		
+		win(currentPlayer.getTeam());
+		
 		currentPlayer = currentPlayer.getTeam() == Team.WHITE ? black : white;
-		currentPlayer.update();
+		//currentPlayer.update();
 	}
 
 	public void paintComponent(Graphics g) {
@@ -169,7 +177,6 @@ public class Board extends JComponent implements Runnable {
 		drawUnderlay(g2d);
 		drawPieces(g2d);
 		drawOverlay(g2d);
-
 	}
 
 	public void drawBoard(Graphics2D g2d) {
@@ -484,19 +491,19 @@ public class Board extends JComponent implements Runnable {
 	}
 
 	public static void win(Team team) {
-
 		boolean checkmate = false;
 
+		System.out.println("testing for mate");
 		switch(team) {
 		case WHITE :
 			//System.out.println("Moved "+this+". Checking for black king check.");
 			if(Board.kingInCheck(Team.BLACK)) {
 				checkmate = true;
-				//System.out.println("Black king is in check.");
-				for(int i = 0; i < blackPieces.size(); i++) {
-					//System.out.println(Board.blackPieces.get(i)+""+Board.blackPieces.get(i).legalMoves());
-					if(!blackPieces.get(i).legalMoves().isEmpty()) {
+				black.update();
+				for(Piece piece : black.getPieces()) {
+					if(!piece.getLegalMoves().isEmpty()) {
 						checkmate = false;
+						break;
 					}
 				}
 			}
@@ -504,9 +511,11 @@ public class Board extends JComponent implements Runnable {
 		case BLACK:
 			if(Board.kingInCheck(Team.WHITE)) {
 				checkmate = true;
-				for(int i = 0; i < whitePieces.size(); i++) {
-					if(!whitePieces.get(i).legalMoves().isEmpty()) {
+				white.update();
+				for(Piece piece : white.getPieces()) {
+					if(!piece.getLegalMoves().isEmpty()) {
 						checkmate = false;
+						break;
 					}
 				}
 			}

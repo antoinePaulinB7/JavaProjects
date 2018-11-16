@@ -40,6 +40,8 @@ public class Board extends JComponent implements Runnable {
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				white.update();
+				black.update();
 				if(state == State.SELECT) {
 					mouseSelect();
 
@@ -48,16 +50,15 @@ public class Board extends JComponent implements Runnable {
 						System.out.println("Found a piece! "+targetPiece);
 					}
 				}else {
-					if(mouseMovePiece()) {
-
-						currentPlayer.updatePossibleMoves();
-						currentPlayer.updateLegalMoves();
-						currentPlayer.updateControlledTiles();
-						
+					if(mouseMovePiece()) {						
 						changeTurn();
 					}
 					state = State.SELECT;
 				}
+				
+				System.out.println(white);
+				System.out.println(black);
+				
 			}
 		});
 		addMouseMotionListener(new MouseMotionAdapter() {
@@ -149,9 +150,9 @@ public class Board extends JComponent implements Runnable {
 	}
 	
 	public void changeTurn() {
+		currentPlayer.update();
 		currentPlayer = currentPlayer.getTeam() == Team.WHITE ? black : white;
-		currentPlayer.updatePossibleMoves();
-		currentPlayer.updateLegalMoves();
+		currentPlayer.update();
 	}
 
 	public void paintComponent(Graphics g) {

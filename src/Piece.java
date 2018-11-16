@@ -26,31 +26,31 @@ public abstract class Piece extends JComponent implements Drawable {
 	};
 
 	public abstract void loadImage();
-	
+
 	public void draw(Graphics g) {
 		int width = application.board.getWidth();
 		int height = application.board.getHeight();
-		
+
 		int x = width/Board.files;
 		int y = height/Board.ranks;
-		
+
 		if(image!=null) {
 			Graphics2D g2d = (Graphics2D) g;
 			g2d.scale(1, -1);
 			image.paintIcon(this, g2d, coordinate.getFileIndex()*x, coordinate.getRankIndex()*y);
 		}
 	}
-	
+
 	public abstract ArrayList<String> possibleMoves();
 
 	public void updatePossibleMoves() {
 		possibleMoves = possibleMoves();
 	}
-	
+
 	public void updateLegalMoves() {
 		legalMoves = legalMoves();
 	}
-	
+
 	public ArrayList<String> legalMoves(){
 		ArrayList<String> lMoves = new ArrayList<>(possibleMoves.size());
 
@@ -78,7 +78,7 @@ public abstract class Piece extends JComponent implements Drawable {
 		Board.getTile(coordinate).setPiece(this);
 
 		if(firstMove) setFirstMove(false);
-		
+
 		Board.win(team);
 	}
 
@@ -86,7 +86,7 @@ public abstract class Piece extends JComponent implements Drawable {
 		Piece deadPiece = null;
 		Coordinate oldCoordinate = new Coordinate(getCoordinate().getFile(),getCoordinate().getRank());
 		boolean moveIsPossible = false;
-		
+
 		if(possibleMoves.contains(coordinate+"")) {
 			moveIsPossible = true;
 
@@ -100,13 +100,16 @@ public abstract class Piece extends JComponent implements Drawable {
 
 			//System.out.println(Board.kingInCheck(team));
 
-			switch(getTeam()) {
-			case WHITE : Board.black.updateControlledTiles();
-			break;
-			case BLACK : Board.white.updateControlledTiles();
-			break;
-			}
+//			switch(getTeam()) {
+//			case WHITE : Board.black.updateControlledTiles();
+//			break;
+//			case BLACK : Board.white.updateControlledTiles();
+//			break;
+//			}
 			
+			//Board.white.updateControlledTiles();
+			//Board.black.updateControlledTiles();
+
 			if(Board.kingInCheck(team)) {
 				System.out.println("Can't let your King get checked.");
 				//Board.show();
@@ -126,13 +129,16 @@ public abstract class Piece extends JComponent implements Drawable {
 			}
 			Board.getTile(coordinate).setPiece(deadPiece);
 			Board.getTile(getCoordinate()).setPiece(this);
+
+//			switch(getTeam()) {
+//			case WHITE : Board.black.updateControlledTiles();
+//			break;
+//			case BLACK : Board.white.updateControlledTiles();
+//			break;
+//			}
 			
-			switch(getTeam()) {
-			case WHITE : Board.black.updateControlledTiles();
-			break;
-			case BLACK : Board.white.updateControlledTiles();
-			break;
-			}
+			//Board.white.updateControlledTiles();
+			//Board.black.updateControlledTiles();
 		}
 
 		return moveIsPossible;
@@ -162,23 +168,25 @@ public abstract class Piece extends JComponent implements Drawable {
 	public Coordinate getCoordinate() {
 		return coordinate;
 	};
-	
+
 	public boolean getFirstMove() {
 		return firstMove;
 	};
-	
+
 	public ArrayList<String> getPossibleMoves(){
+		if(possibleMoves==null)updatePossibleMoves();
 		return possibleMoves;
 	};
-	
+
 	public ArrayList<String> getLegalMoves(){
+		if(legalMoves==null)updateLegalMoves();
 		return legalMoves;
 	};
 
 	public void setCoordinate(Coordinate coordinate) {
 		this.coordinate = coordinate;
 	};
-	
+
 	public void setFirstMove(boolean value) {
 		this.firstMove = value;
 	};

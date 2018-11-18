@@ -173,6 +173,24 @@ public class Board extends JComponent implements Runnable {
 	}
 
 	public void changeTurn() {
+		for(Piece piece: whitePieces) {
+			if(piece.getClass()==Pawn.class) {
+				Coordinate temp = piece.getCoordinate();
+				if(temp.getRank()==8) {
+					piece.die();
+					getTile(temp).setPiece(new Queen(Team.WHITE,temp));
+				}
+			}
+		}
+		for(Piece piece: blackPieces) {
+			if(piece.getClass()==Pawn.class) {
+				Coordinate temp = piece.getCoordinate();
+				if(temp.getRank()==1) {
+					piece.die();
+					getTile(temp).setPiece(new Queen(Team.BLACK,temp));
+				}
+			}
+		}
 		white.update();
 		black.update();
 

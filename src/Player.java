@@ -34,19 +34,19 @@ public class Player {
 		int value = 0;
 		for(Piece piece : pieces) {
 			value += piece.getValue();
-			value += piece.legalMoves().size();
-			switch(team) {
-			case WHITE :
-				if(Board.black!=null&&Board.black.controls(piece.getCoordinate())){
-					value -= piece.getValue()*2;
-				}
-				break;
-			case BLACK:
-				if(Board.white!=null&&Board.white.controls(piece.getCoordinate())) {
-					value -= piece.getValue()*2;
-				}
-				break;
-			}
+//			value += piece.legalMoves().size();
+//			switch(team) {
+//			case WHITE :
+//				if(Board.black!=null&&Board.black.controls(piece.getCoordinate())){
+//					value -= piece.getValue()*2;
+//				}
+//				break;
+//			case BLACK:
+//				if(Board.white!=null&&Board.white.controls(piece.getCoordinate())) {
+//					value -= piece.getValue()*2;
+//				}
+//				break;
+//			}
 			//if(!controls(piece.getCoordinate()))value -= 1;
 		}
 		value += controlledTiles.size();

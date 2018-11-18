@@ -12,6 +12,8 @@ import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class Board extends JComponent implements Runnable {
 	/**
@@ -36,14 +38,27 @@ public class Board extends JComponent implements Runnable {
 	public BufferedImage background;
 	public static int width, height;
 	public static int updates = 0;
+	public AI frank;
 
 	public enum State {
 		SELECT,MOVE;
 	}
 
 	public Board() {
+		addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyChar()=='a') {
+					
+					System.out.println("meme");
+					frank.pickAMove();
+					changeTurn();
+				}
+			}
+		});
 		addMouseListener(new MouseAdapter() {
 			@Override
+			//email jacob gagne from SES(concordia) for minimax
 			public void mouseClicked(MouseEvent e) {
 				System.out.println("Click.");
 
@@ -129,6 +144,7 @@ public class Board extends JComponent implements Runnable {
 		yH = height/ranks;
 
 		background = Utils.makeBackground();
+		frank = new AI();
 	}
 
 	@Override

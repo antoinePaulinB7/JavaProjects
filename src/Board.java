@@ -49,12 +49,19 @@ public class Board extends JComponent implements Runnable {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if(e.getKeyChar()=='a') {
-					
+
 					System.out.println("meme");
 					frank.pickAMove();
 					changeTurn();
 				}
+				if(e.getKeyChar()=='s') {
+
+					System.out.println("MEME");
+					frank.pickBestMove();
+					changeTurn();
+				}
 			}
+
 		});
 		addMouseListener(new MouseAdapter() {
 			@Override
@@ -179,6 +186,7 @@ public class Board extends JComponent implements Runnable {
 				if(temp.getRank()==8) {
 					piece.die();
 					getTile(temp).setPiece(new Queen(Team.WHITE,temp));
+					break;
 				}
 			}
 		}
@@ -188,6 +196,7 @@ public class Board extends JComponent implements Runnable {
 				if(temp.getRank()==1) {
 					piece.die();
 					getTile(temp).setPiece(new Queen(Team.BLACK,temp));
+					break;
 				}
 			}
 		}

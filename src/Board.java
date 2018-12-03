@@ -549,7 +549,7 @@ public class Board extends JComponent implements Runnable {
 
 	}
 
-	public static void win(Team team) {
+	public void win(Team team) {
 		boolean checkmate = false;
 
 		System.out.println("testing for mate");
@@ -588,9 +588,10 @@ public class Board extends JComponent implements Runnable {
 		}
 	}
 
-	public static void gameOver() {
+	public void gameOver() {
 		gameOn = false;
 		showInConsole();
+		repaint();
 	}
 
 	public static Tile[][] loadBoard(String[][]config){

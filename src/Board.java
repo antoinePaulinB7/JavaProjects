@@ -399,7 +399,7 @@ public class Board extends JComponent implements Runnable {
 			targetPiece.moveTo(new Coordinate('g',targetPiece.getCoordinate().getRank()));
 			getTile(new Coordinate('h',targetPiece.getCoordinate().getRank())).getPiece().moveTo(new Coordinate('f',targetPiece.getCoordinate().getRank()));
 			return true;
-		}else if(targetPiece.testMoveTo(targetCoordinate)) {
+		}else if(targetPiece.testMoveTo(targetCoordinate)>Integer.MIN_VALUE) {
 			targetPiece.moveTo(targetCoordinate);
 			return true;
 		}
@@ -489,7 +489,7 @@ public class Board extends JComponent implements Runnable {
 
 			Coordinate coordinate = new Coordinate(file,rank);
 
-			if(piece.testMoveTo(coordinate)) {
+			if(piece.testMoveTo(coordinate)>Integer.MIN_VALUE) {
 				piece.moveTo(coordinate);
 			}else {
 				selectPiece(piece.getTeam());

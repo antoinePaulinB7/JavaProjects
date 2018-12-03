@@ -62,7 +62,7 @@ public abstract class Piece extends JComponent implements Drawable {
 			file = temp.charAt(0)-'a';
 			rank = temp.charAt(1)-49;
 
-			if(this.testMoveTo(new Coordinate(file, rank))) {
+			if(this.testMoveTo(new Coordinate(file, rank))>Integer.MIN_VALUE) {
 				lMoves.add(temp);
 			}
 		}
@@ -84,10 +84,11 @@ public abstract class Piece extends JComponent implements Drawable {
 		}
 	}
 
-	public boolean testMoveTo(Coordinate coordinate) {
+	public int testMoveTo(Coordinate coordinate) {
 		Piece deadPiece = null;
 		Coordinate oldCoordinate = new Coordinate(getCoordinate().getFile(),getCoordinate().getRank());
 		boolean moveIsPossible = false;
+		int moveValue = Integer.MIN_VALUE;
 
 		if(possibleMoves.contains(coordinate+"")) {
 			moveIsPossible = true;
@@ -99,12 +100,14 @@ public abstract class Piece extends JComponent implements Drawable {
 			Board.getTile(getCoordinate()).setPiece(null);
 			setCoordinate(coordinate);
 			Board.getTile(coordinate).setPiece(this);
-
+			
 			try {
 				switch(getTeam()) {
 				case WHITE : Board.black.updateControlledTiles();
+				moveValue = Board.white.calculateValue()-Board.black.calculateValue();
 				break;
 				case BLACK : Board.white.updateControlledTiles();
+				moveValue = Board.black.calculateValue()-Board.white.calculateValue();
 				break;
 				}
 			}catch(NullPointerException e) {
@@ -139,8 +142,10 @@ public abstract class Piece extends JComponent implements Drawable {
 				System.out.println("Couldn't update boards");
 			}
 		}
+		
+		if(!moveIsPossible) moveValue = Integer.MIN_VALUE;
 
-		return moveIsPossible;
+		return moveValue;
 	}
 
 	public void die() {

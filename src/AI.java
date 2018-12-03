@@ -3,6 +3,7 @@ import java.util.Random;
 public class AI {
 
 	public Player perspective = null;
+	public Player opponent = null;
 	public Random random;	
 
 	public void pickAMove() {
@@ -40,7 +41,7 @@ public class AI {
 
 		}while(keepSearching);
 
-		if(randomP.testMoveTo(new Coordinate(file,rank))){
+		if(randomP.testMoveTo(new Coordinate(file,rank))>Integer.MIN_VALUE){
 			randomP.moveTo(new Coordinate(file,rank));
 		}else {
 			pickAMove();
@@ -49,7 +50,8 @@ public class AI {
 	
 	public void pickBestMove() {
 		perspective = Board.currentPlayer;
-		int highestValue = -1000;
+		opponent = perspective.getTeam()==Team.WHITE ? Board.black : Board.white; 
+		int highestValue = -1000000;
 		char file,chosenFile = 0;
 		int rank,chosenRank = 0;
 		Piece chosenPiece = null;
@@ -59,8 +61,17 @@ public class AI {
 				if(!(s.equals("O-O")||s.equals("O--O"))) {
 					file = s.charAt(0);
 					rank = Integer.parseInt(s.charAt(1)+"");
-					if(p.testMoveTo(new Coordinate(file,rank))) {
-						if(perspective.calculateValue()>highestValue) {
+					
+					int value = p.testMoveTo(new Coordinate(file,rank));
+					
+					if(value>Integer.MIN_VALUE) {
+						if(value>highestValue) {
+							highestValue = value;
+							chosenPiece = p;
+							chosenFile = file;
+							chosenRank = rank;
+						}else if(value==highestValue
+							&& Math.random()>0.5) {
 							chosenPiece = p;
 							chosenFile = file;
 							chosenRank = rank;

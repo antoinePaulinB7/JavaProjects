@@ -27,7 +27,7 @@ public class Player {
 		int value = 0;
 		for(Piece piece : pieces) {
 			value += piece.getValue();
-			value += piece.getLegalMoves().size();
+			if(piece.calculateControlledTiles().size()==0)value -= 5;
 			switch(team) {
 			case WHITE :
 				if(Board.black!=null
@@ -42,7 +42,7 @@ public class Player {
 				}
 				break;
 			}
-			if(!controls(piece.getCoordinate()))value -= 1;
+			if(!controls(piece.getCoordinate()))value -= 5;
 		}
 		value += controlledTiles.size();
 		return value;

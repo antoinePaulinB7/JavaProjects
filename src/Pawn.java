@@ -114,6 +114,12 @@ public class Pawn extends Piece{
 		// TODO Auto-generated method stub
 		super.draw(g);
 	}
+	
+	public void changeToQueen() {
+		Coordinate temp = new Coordinate(getCoordinate().getFile(),getCoordinate().getRank());
+		die();
+		Board.getTile(temp).setPiece(new Queen(getTeam(),temp));
+	}
 
 	@Override
 	public Set<Tile> calculateControlledTiles() {

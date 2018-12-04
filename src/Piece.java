@@ -46,6 +46,8 @@ public abstract class Piece extends JComponent implements Drawable {
 	public abstract ArrayList<String> possibleMoves();
 	
 	public abstract Set<Tile> calculateControlledTiles();
+	
+	public abstract int calculateValue();
 
 	public void updatePossibleMoves() {
 		possibleMoves = possibleMoves();
@@ -184,6 +186,7 @@ public abstract class Piece extends JComponent implements Drawable {
 	public int getValue() {
 		return value;
 	}
+	
 	public ArrayList<String> getPossibleMoves(){
 		if(possibleMoves==null)updatePossibleMoves();
 		return possibleMoves;

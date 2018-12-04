@@ -269,9 +269,9 @@ public class King extends Piece {
 		// TODO Auto-generated method stub
 		switch(getTeam()) {
 		case WHITE :
-			return "K";
+			return "K"+calculateValue();
 		case BLACK :
-			return "k";
+			return "k"+calculateValue();
 		default :
 			return "K";
 		}
@@ -310,11 +310,11 @@ public class King extends Piece {
 	public Set<Tile> calculateControlledTiles() {
 		Set<Tile> tiles = new HashSet<Tile>();
 		Coordinate temp;
-		
+
 		for(int j = 1; j <= 8; j++) {
-			
+
 			temp = new Coordinate(getCoordinate().getFile(),getCoordinate().getRank());
-			
+
 			switch(j) {
 			case 1 :
 				temp = temp.up();
@@ -341,13 +341,69 @@ public class King extends Piece {
 				temp = temp.left().up();
 				break;
 			}
-			
+
 			if(Board.getTile(temp)!=null){
 				tiles.add(Board.getTile(temp));
 			}
 
 		}
 		return tiles;
+	}
+
+	@Override
+	public int calculateValue() {
+		int value = getValue();
+		Coordinate temp;
+		//King is protected
+		//TO-DO : FIND A BETTER ALGORITHM
+//		for(int j = 1; j <= 8; j++) {
+//
+//			temp = new Coordinate(getCoordinate().getFile(),getCoordinate().getRank());
+//
+//			switch(j) {
+//			case 1 :
+//				temp = temp.up();
+//				break;
+//			case 2 : 
+//				temp = temp.up().right();
+//				break;
+//			case 3 : 
+//				temp = temp.right();
+//				break;
+//			case 4 :
+//				temp = temp.right().down();
+//				break;
+//			case 5 :
+//				temp = temp.down();
+//				break;
+//			case 6 : 
+//				temp = temp.down().left();
+//				break;
+//			case 7 :
+//				temp = temp.left();
+//				break;
+//			case 8 :
+//				temp = temp.left().up();
+//				break;
+//			}
+//
+//			switch(getTeam()) {
+//			case WHITE :
+//				if(Board.getTile(temp)!=null && Board.getTile(temp).isOccupiedByWhite()){
+//					value++;
+//				}
+//				break;
+//			case BLACK :
+//				if(Board.getTile(temp)!=null && Board.getTile(temp).isOccupiedByBlack()){
+//					value++;
+//				}
+//				break;
+//			}
+//
+//
+//		}
+
+		return value;
 	}
 
 }

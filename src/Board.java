@@ -212,8 +212,23 @@ public class Board extends JComponent implements Runnable {
 		black.update();
 
 		win(currentPlayer.getTeam());
+		
+		state = State.SELECT;
 
 		currentPlayer = currentPlayer.getTeam() == Team.WHITE ? black : white;
+		
+		debug();
+	}
+	
+	public void debug() {
+		for(Piece p : whitePieces) {
+			System.out.println(p);
+		}
+		for(Piece p : blackPieces) {
+			System.out.println(p);
+		}
+		
+		System.out.println(white.calculateValue()-black.calculateValue());
 	}
 
 	public void paintComponent(Graphics g) {
@@ -390,13 +405,13 @@ public class Board extends JComponent implements Runnable {
 			switch(currentPlayer.getTeam()) {
 			case WHITE :
 				if(getTile(tempCoord).isOccupiedByWhite()
-						&&!getTile(tempCoord).getPiece().legalMoves().isEmpty()) {
+						&&!getTile(tempCoord).getPiece().getLegalMoves().isEmpty()) {
 					targetPiece = getTile(tempCoord).getPiece();
 				}
 				break;
 			case BLACK :
 				if(getTile(tempCoord).isOccupiedByBlack()
-						&&!getTile(tempCoord).getPiece().legalMoves().isEmpty()) {
+						&&!getTile(tempCoord).getPiece().getLegalMoves().isEmpty()) {
 					targetPiece = getTile(tempCoord).getPiece();
 				}
 				break;

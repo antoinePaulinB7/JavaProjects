@@ -105,9 +105,9 @@ public class Bishop extends Piece{
 		// TODO Auto-generated method stub
 		switch(getTeam()) {
 		case WHITE :
-			return "B";
+			return "B"+calculateValue();
 		case BLACK :
-			return "b";
+			return "b"+calculateValue();
 		default :
 			return "B";
 		}
@@ -177,6 +177,29 @@ public class Bishop extends Piece{
 		}
 
 		return tiles;
+	}
+
+	@Override
+	public int calculateValue() {
+		int value = getValue();
+		int numberOfBishops = 0;
+		//If the bishop pair is intact
+		switch(getTeam()) {
+		case WHITE :
+			for(Piece p : Board.whitePieces) {
+				if(p.getClass()==Bishop.class)numberOfBishops++;
+			}
+			break;
+		case BLACK :
+			for(Piece p : Board.blackPieces) {
+				if(p.getClass()==Bishop.class)numberOfBishops++;
+			}
+			break;
+		}
+		
+		if(numberOfBishops>1)value++;
+		
+		return value;
 	}
 
 

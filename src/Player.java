@@ -26,18 +26,20 @@ public class Player {
 	public int calculateValue() {
 		int value = 0;
 		for(Piece piece : pieces) {
-			value += piece.getValue();
+			value += piece.calculateValue();
 			if(piece.calculateControlledTiles().size()==0)value -= 5;
 			switch(team) {
 			case WHITE :
 				if(Board.black!=null
-				&& Board.black.controls(piece.getCoordinate())){
+				&& Board.black.controls(piece.getCoordinate())
+				&& !Board.white.controls(piece.getCoordinate())){
 					value -= 1;
 				}
 				break;
 			case BLACK:
 				if(Board.white!=null
-				&& Board.white.controls(piece.getCoordinate())){
+				&& Board.white.controls(piece.getCoordinate())
+				&& !Board.black.controls(piece.getCoordinate())){
 					value -= 1;
 				}
 				break;

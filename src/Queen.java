@@ -128,9 +128,9 @@ public class Queen extends Piece {
 		// TODO Auto-generated method stub
 		switch(getTeam()) {
 		case WHITE :
-			return "Q";
+			return "Q"+calculateValue();
 		case BLACK :
-			return "q";
+			return "q"+calculateValue();
 		default :
 			return "Q";
 		}
@@ -213,6 +213,27 @@ public class Queen extends Piece {
 		}
 
 		return tiles;
+	}
+
+	@Override
+	public int calculateValue() {
+		int value = getValue();
+		try {
+
+			//if queen is safe
+			switch(getTeam()) {
+			case WHITE :
+				if(!Board.black.controls(getCoordinate()))value+=5;
+				break;
+			case BLACK :
+				if(!Board.white.controls(getCoordinate()))value+=5;
+				break;
+			}
+		}catch(NullPointerException e) {
+		
+		}
+		
+		return value;
 	}
 	
 }

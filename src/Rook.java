@@ -105,9 +105,9 @@ public class Rook extends Piece {
 		// TODO Auto-generated method stub
 		switch(getTeam()) {
 		case WHITE :
-			return "R";//+" "+getFirstMove();
+			return "R"+calculateValue();//+" "+getFirstMove();
 		case BLACK :
-			return "r";//+" "+getFirstMove();
+			return "r"+calculateValue();//+" "+getFirstMove();
 		default :
 			return "R";
 		}
@@ -176,6 +176,150 @@ public class Rook extends Piece {
 		}
 
 		return tiles;
+	}
+
+	@Override
+	public int calculateValue() {
+		int value = getValue();
+		
+		//If rooks are connected
+		Coordinate temp;
+
+		switch(getTeam()) {
+		case WHITE :
+			//If rooks are connected
+			for(int j = 1; j <= 4; j++) {
+
+				temp = new Coordinate(getCoordinate().getFile(),getCoordinate().getRank());
+
+				for(int i = 1; i < 8; i++) {
+					switch(j) {
+					case 1 :
+						temp = temp.up();
+						break;
+					case 2 : 
+						temp = temp.right();
+						break;
+					case 3 : 
+						temp = temp.down();
+						break;
+					case 4 :
+						temp = temp.left();
+						break;
+					}
+					if(Board.getTile(temp)!=null) {
+						if(Board.getTile(temp).isOccupiedByWhite()) {
+							if(Board.getTile(temp).getPiece().getClass()==Rook.class)value+=5;
+							break;
+						}else if(Board.getTile(temp).isOccupiedByBlack()) {
+							break;
+						}
+					}else {
+						break;
+					}
+				}
+			}
+			//If rooks are stacked
+			
+			for(int j = 1; j <= 2; j++) {
+				
+				temp = new Coordinate(getCoordinate().getFile(),getCoordinate().getRank());
+				
+				for(int i = 1; i < 8; i++) {
+					switch(j) {
+					case 1 :
+						temp = temp.up();
+						break;
+					case 2 :
+						temp = temp.down();
+						break;
+					}
+					if(Board.getTile(temp)!=null) {
+						if(Board.getTile(temp).isOccupiedByWhite()) {
+							if(Board.getTile(temp).getPiece().getClass()==Rook.class)value+=5;
+							break;
+						}else if(Board.getTile(temp).isOccupiedByBlack()) {
+							break;
+						}
+					}else {
+						break;
+					}
+				}
+				
+			}
+			
+			//If rooks are on 7th rank/ 2nd rank
+			if(getCoordinate().getRank()==7)value+=5;
+			break;
+		case BLACK :
+			//If rooks are connected
+			for(int j = 1; j <= 4; j++) {
+
+				temp = new Coordinate(getCoordinate().getFile(),getCoordinate().getRank());
+
+				for(int i = 1; i < 8; i++) {
+					switch(j) {
+					case 1 :
+						temp = temp.up();
+						break;
+					case 2 : 
+						temp = temp.right();
+						break;
+					case 3 : 
+						temp = temp.down();
+						break;
+					case 4 :
+						temp = temp.left();
+						break;
+					}
+					if(Board.getTile(temp)!=null) {
+						if(Board.getTile(temp).isOccupiedByBlack()) {
+							if(Board.getTile(temp).getPiece().getClass()==Rook.class)value+=5;
+							break;
+						}else if(Board.getTile(temp).isOccupiedByWhite()) {
+							break;
+						}
+					}else {
+						break;
+					}
+				}
+			}
+			//If rooks are stacked
+			
+			for(int j = 1; j <= 2; j++) {
+				
+				temp = new Coordinate(getCoordinate().getFile(),getCoordinate().getRank());
+				
+				for(int i = 1; i < 8; i++) {
+					switch(j) {
+					case 1 :
+						temp = temp.up();
+						break;
+					case 2 :
+						temp = temp.down();
+						break;
+					}
+					if(Board.getTile(temp)!=null) {
+						if(Board.getTile(temp).isOccupiedByBlack()) {
+							if(Board.getTile(temp).getPiece().getClass()==Rook.class)value+=5;
+							break;
+						}else if(Board.getTile(temp).isOccupiedByWhite()) {
+							break;
+						}
+					}else {
+						break;
+					}
+				}
+				
+			}
+			
+			//If rooks are on 7th rank/ 2nd rank
+			if(getCoordinate().getRank()==2)value+=5;
+			break;
+		}
+			
+		
+		return value;
 	}
 
 }

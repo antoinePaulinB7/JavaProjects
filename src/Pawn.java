@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -111,5 +113,42 @@ public class Pawn extends Piece{
 	public void draw(Graphics g) {
 		// TODO Auto-generated method stub
 		super.draw(g);
+	}
+
+	@Override
+	public Set<Tile> calculateControlledTiles() {
+		// TODO Auto-generated method stub
+		Set<Tile> tiles = new HashSet<Tile>();
+		Coordinate tempCoord;
+		int file, rank;
+		switch(getTeam()) {
+		case WHITE :
+			//Put this code inside the piece classes
+			//top right
+			tempCoord = this.getCoordinate().up().right();
+			file = tempCoord.getFileIndex();
+			rank = tempCoord.getRankIndex();
+			tiles.add(Board.getTile(new Coordinate(file,rank)));
+			//top left
+			tempCoord = this.getCoordinate().up().left();
+			file = tempCoord.getFileIndex();
+			rank = tempCoord.getRankIndex();
+			tiles.add(Board.getTile(new Coordinate(file,rank)));
+			break;
+		case BLACK :
+			//bottom right
+			tempCoord = this.getCoordinate().down().right();
+			file = tempCoord.getFileIndex();
+			rank = tempCoord.getRankIndex();
+			tiles.add(Board.getTile(new Coordinate(file,rank)));
+			//bottom left
+			tempCoord = this.getCoordinate().down().left();
+			file = tempCoord.getFileIndex();
+			rank = tempCoord.getRankIndex();
+			tiles.add(Board.getTile(new Coordinate(file,rank)));
+			break;
+		}
+		
+		return tiles;
 	}
 }

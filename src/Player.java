@@ -17,16 +17,9 @@ public class Player {
 
 	public Set<Tile> calculateControlledTiles(){
 		Set<Tile> temp = new HashSet<Tile>();
-		int file, rank;
 		for(Piece piece : pieces) {
-			ArrayList<String> pieceMoves = piece.possibleMoves();
-			for(String move : pieceMoves) {
-				file = move.charAt(0)-'a';
-				rank = move.charAt(1)-49;
-				temp.add(Board.getTile(new Coordinate(file,rank)));
-			}
+			temp.addAll(piece.calculateControlledTiles());
 		}
-
 		return temp;
 	}
 
@@ -34,27 +27,29 @@ public class Player {
 		int value = 0;
 		for(Piece piece : pieces) {
 			value += piece.getValue();
-//			value += piece.legalMoves().size();
-//			switch(team) {
-//			case WHITE :
-//				if(Board.black!=null&&Board.black.controls(piece.getCoordinate())){
-//					value -= piece.getValue()*2;
-//				}
-//				break;
-//			case BLACK:
-//				if(Board.white!=null&&Board.white.controls(piece.getCoordinate())) {
-//					value -= piece.getValue()*2;
-//				}
-//				break;
-//			}
-			//if(!controls(piece.getCoordinate()))value -= 1;
+			value += piece.getLegalMoves().size();
+			switch(team) {
+			case WHITE :
+				if(Board.black!=null
+				&& Board.black.controls(piece.getCoordinate())){
+					value -= 1;
+				}
+				break;
+			case BLACK:
+				if(Board.white!=null
+				&& Board.white.controls(piece.getCoordinate())){
+					value -= 1;
+				}
+				break;
+			}
+			if(!controls(piece.getCoordinate()))value -= 1;
 		}
 		value += controlledTiles.size();
 		return value;
 	}
 
 	public boolean controls(Coordinate coordinate) {
-		return controlledTiles.contains(Board.getTile(coordinate));
+		return calculateControlledTiles().contains(Board.getTile(coordinate));
 	}
 
 	public void update() {
@@ -73,7 +68,6 @@ public class Player {
 	}
 
 	public void updateLegalMoves() {
-
 		System.out.println("Updating legal moves for "+team);
 		for(Piece piece : pieces) {
 			piece.updateLegalMoves();

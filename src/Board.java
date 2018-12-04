@@ -48,17 +48,19 @@ public class Board extends JComponent implements Runnable {
 		addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				if(e.getKeyChar()=='a') {
+				if(gameOn) {
+					if(e.getKeyChar()=='a') {
 
-					System.out.println("meme");
-					frank.pickAMove();
-					changeTurn();
-				}
-				if(e.getKeyChar()=='s') {
+						System.out.println("meme");
+						frank.pickAMove();
+						changeTurn();
+					}
+					if(e.getKeyChar()=='s') {
 
-					System.out.println("MEME");
-					frank.pickBestMove();
-					changeTurn();
+						System.out.println("MEME");
+						frank.pickBestMove();
+						changeTurn();
+					}
 				}
 			}
 
@@ -180,26 +182,26 @@ public class Board extends JComponent implements Runnable {
 	}
 
 	public void changeTurn() {
-		for(Piece piece: whitePieces) {
-			if(piece.getClass()==Pawn.class) {
-				Coordinate temp = piece.getCoordinate();
-				if(temp.getRank()==8) {
-					piece.die();
-					getTile(temp).setPiece(new Queen(Team.WHITE,temp));
-					break;
-				}
-			}
-		}
-		for(Piece piece: blackPieces) {
-			if(piece.getClass()==Pawn.class) {
-				Coordinate temp = piece.getCoordinate();
-				if(temp.getRank()==1) {
-					piece.die();
-					getTile(temp).setPiece(new Queen(Team.BLACK,temp));
-					break;
-				}
-			}
-		}
+		//		for(Piece piece: whitePieces) {
+		//			if(piece.getClass()==Pawn.class) {
+		//				Coordinate temp = piece.getCoordinate();
+		//				if(temp.getRank()==8) {
+		//					piece.die();
+		//					getTile(temp).setPiece(new Queen(Team.WHITE,temp));
+		//					break;
+		//				}
+		//			}
+		//		}
+		//		for(Piece piece: blackPieces) {
+		//			if(piece.getClass()==Pawn.class) {
+		//				Coordinate temp = piece.getCoordinate();
+		//				if(temp.getRank()==1) {
+		//					piece.die();
+		//					getTile(temp).setPiece(new Queen(Team.BLACK,temp));
+		//					break;
+		//				}
+		//			}
+		//		}
 		white.update();
 		black.update();
 
@@ -240,6 +242,23 @@ public class Board extends JComponent implements Runnable {
 		}
 
 		g2d.drawRect(selectX*xW, selectY*yH, xW, yH);
+		g2d.setColor(new Color(255,0,0,100));
+		
+		for(int f = 0; f < board.length; f++) {
+			for(int r = 0; r < board[f].length; r++) {
+				if(white.controls(new Coordinate(f,r))
+				&& black.controls(new Coordinate(f,r))){
+					g2d.setColor(new Color(0,255,0,100));
+					g2d.fillRect(f*xW, r*yH, xW, yH);
+				}else if(white.controls(new Coordinate(f,r))) {
+					g2d.setColor(new Color(255,0,0,100));
+					g2d.fillRect(f*xW, r*yH, xW, yH);
+				}else if(black.controls(new Coordinate(f,r))) {
+					g2d.setColor(new Color(0,0,255,100));
+					g2d.fillRect(f*xW, r*yH, xW, yH);
+				}
+			}
+		}
 
 	}
 

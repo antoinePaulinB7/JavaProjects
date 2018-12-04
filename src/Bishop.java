@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -84,7 +86,7 @@ public class Bishop extends Piece{
 						break;
 					}
 					if(Board.getTile(temp)!=null
-					&&!Board.getTile(temp).isOccupiedByBlack()) {
+							&&!Board.getTile(temp).isOccupiedByBlack()) {
 						moves.add(temp+"");
 						if(Board.getTile(temp).isOccupiedByWhite())break;
 					}else {
@@ -117,7 +119,7 @@ public class Bishop extends Piece{
 		// TODO Auto-generated method stub
 		String team = getTeam() == Team.WHITE ? "white" : "black";
 		String fileName = team+"_bishop.png";
-		
+
 		URL url;
 		try {
 			url = getClass().getResource(fileName);
@@ -130,15 +132,51 @@ public class Bishop extends Piece{
 			System.out.println("Couldn't load the bishop's image");
 			e.printStackTrace();
 		}
-		
+
 		image = new ImageIcon(Utils.getScaledImage(image.getImage(), 50, 50));
-		
+
 	}
-	
+
 	@Override
 	public void draw(Graphics g) {
 		// TODO Auto-generated method stub
 		super.draw(g);
+	}
+
+	@Override
+	public Set<Tile> calculateControlledTiles() {
+		Set<Tile> tiles = new HashSet<Tile>();
+		Coordinate temp;
+
+		for(int j = 1; j <= 4; j++) {
+
+			temp = new Coordinate(getCoordinate().getFile(),getCoordinate().getRank());
+
+			for(int i = 1; i < 8; i++) {
+				switch(j) {
+				case 1 :
+					temp = temp.up().right();
+					break;
+				case 2 : 
+					temp = temp.up().left();
+					break;
+				case 3 : 
+					temp = temp.down().right();
+					break;
+				case 4 :
+					temp = temp.down().left();
+					break;
+				}
+				if(Board.getTile(temp)!=null) {
+					tiles.add(Board.getTile(temp));
+					if(Board.getTile(temp).isOccupied())break;
+				}else {
+					break;
+				}
+			}
+		}
+
+		return tiles;
 	}
 
 

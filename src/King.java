@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -67,7 +69,8 @@ public class King extends Piece {
 				}
 
 				if(Board.getTile(temp)!=null
-						&&!Board.getTile(temp).isOccupiedByWhite()) {
+						&&!Board.getTile(temp).isOccupiedByWhite()
+						&&!Board.black.controls(temp)) {
 					moves.add(temp+"");
 				}
 
@@ -170,7 +173,8 @@ public class King extends Piece {
 				}
 
 				if(Board.getTile(temp)!=null
-						&&!Board.getTile(temp).isOccupiedByBlack()) {
+						&&!Board.getTile(temp).isOccupiedByBlack()
+						&&!Board.white.controls(temp)) {
 					moves.add(temp+"");
 				}
 
@@ -272,13 +276,13 @@ public class King extends Piece {
 			return "K";
 		}
 	}
-	
+
 	@Override
 	public void loadImage() {
 		// TODO Auto-generated method stub
 		String team = getTeam() == Team.WHITE ? "white" : "black";
 		String fileName = team+"_king.png";
-		
+
 		URL url;
 		try {
 			url = getClass().getResource(fileName);
@@ -291,15 +295,59 @@ public class King extends Piece {
 			System.out.println("Couldn't load the king's image");
 			e.printStackTrace();
 		}
-		
+
 		image = new ImageIcon(Utils.getScaledImage(image.getImage(), 50, 50));
-		
+
 	}
-	
+
 	@Override
 	public void draw(Graphics g) {
 		// TODO Auto-generated method stub
 		super.draw(g);
+	}
+
+	@Override
+	public Set<Tile> calculateControlledTiles() {
+		Set<Tile> tiles = new HashSet<Tile>();
+		Coordinate temp;
+		
+		for(int j = 1; j <= 8; j++) {
+			
+			temp = new Coordinate(getCoordinate().getFile(),getCoordinate().getRank());
+			
+			switch(j) {
+			case 1 :
+				temp = temp.up();
+				break;
+			case 2 : 
+				temp = temp.up().right();
+				break;
+			case 3 : 
+				temp = temp.right();
+				break;
+			case 4 :
+				temp = temp.right().down();
+				break;
+			case 5 :
+				temp = temp.down();
+				break;
+			case 6 : 
+				temp = temp.down().left();
+				break;
+			case 7 :
+				temp = temp.left();
+				break;
+			case 8 :
+				temp = temp.left().up();
+				break;
+			}
+			
+			if(Board.getTile(temp)!=null){
+				tiles.add(Board.getTile(temp));
+			}
+
+		}
+		return tiles;
 	}
 
 }

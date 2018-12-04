@@ -9,6 +9,10 @@ public class AI {
 	public void pickAMove() {
 		random = new Random();
 		perspective = Board.currentPlayer;
+		opponent = perspective.getTeam()==Team.WHITE ? Board.black : Board.white;
+		perspective.update();
+		opponent.update();
+		
 		int index;
 		Piece randomP;
 		char file = 0;
@@ -43,6 +47,8 @@ public class AI {
 
 		if(randomP.testMoveTo(new Coordinate(file,rank))>Integer.MIN_VALUE){
 			randomP.moveTo(new Coordinate(file,rank));
+			perspective.update();
+			opponent.update();
 		}else {
 			pickAMove();
 		}
@@ -50,8 +56,12 @@ public class AI {
 	
 	public void pickBestMove() {
 		perspective = Board.currentPlayer;
-		opponent = perspective.getTeam()==Team.WHITE ? Board.black : Board.white; 
-		int highestValue = -1000000;
+		opponent = perspective.getTeam()==Team.WHITE ? Board.black : Board.white;
+		
+		perspective.update();
+		opponent.update();
+		
+		int highestValue = Integer.MIN_VALUE;
 		char file,chosenFile = 0;
 		int rank,chosenRank = 0;
 		Piece chosenPiece = null;
@@ -81,6 +91,12 @@ public class AI {
 			}
 		}
 		
-		chosenPiece.moveTo(new Coordinate(chosenFile,chosenRank));
+		if(chosenPiece!=null) {
+			chosenPiece.moveTo(new Coordinate(chosenFile,chosenRank));
+			perspective.update();
+			opponent.update();
+		}else {
+			pickAMove();
+		}
 	}
 }

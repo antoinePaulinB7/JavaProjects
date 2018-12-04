@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -138,6 +140,42 @@ public class Rook extends Piece {
 	public void draw(Graphics g) {
 		// TODO Auto-generated method stub
 		super.draw(g);
+	}
+
+	@Override
+	public Set<Tile> calculateControlledTiles() {
+		Set<Tile> tiles = new HashSet<Tile>();
+		Coordinate temp;
+
+		for(int j = 1; j <= 4; j++) {
+
+			temp = new Coordinate(getCoordinate().getFile(),getCoordinate().getRank());
+
+			for(int i = 1; i < 8; i++) {
+				switch(j) {
+				case 1 :
+					temp = temp.up();
+					break;
+				case 2 : 
+					temp = temp.right();
+					break;
+				case 3 : 
+					temp = temp.down();
+					break;
+				case 4 :
+					temp = temp.left();
+					break;
+				}
+				if(Board.getTile(temp)!=null) {
+					tiles.add(Board.getTile(temp));
+					if(Board.getTile(temp).isOccupied())break;
+				}else {
+					break;
+				}
+			}
+		}
+
+		return tiles;
 	}
 
 }

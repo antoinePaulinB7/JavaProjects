@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -143,5 +145,49 @@ public class Knight extends Piece{
 	public void draw(Graphics g) {
 		// TODO Auto-generated method stub
 		super.draw(g);
+	}
+
+	@Override
+	public Set<Tile> calculateControlledTiles() {
+		Set<Tile> tiles = new HashSet<Tile>();
+		Coordinate temp;
+		
+		for(int j = 1; j <= 8; j++) {
+			
+			temp = new Coordinate(getCoordinate().getFile(),getCoordinate().getRank());
+			
+			switch(j) {
+			case 1 :
+				temp = temp.up().up().right();
+				break;
+			case 2 : 
+				temp = temp.up().up().left();
+				break;
+			case 3 : 
+				temp = temp.up().right().right();
+				break;
+			case 4 :
+				temp = temp.up().left().left();
+				break;
+			case 5 :
+				temp = temp.down().down().right();
+				break;
+			case 6 : 
+				temp = temp.down().down().left();
+				break;
+			case 7 :
+				temp = temp.down().right().right();
+				break;
+			case 8 :
+				temp = temp.down().left().left();
+				break;
+			}
+			
+			if(Board.getTile(temp)!=null){
+				tiles.add(Board.getTile(temp));
+			}
+
+		}
+		return tiles;
 	}
 }

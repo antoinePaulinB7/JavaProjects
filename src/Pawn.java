@@ -199,9 +199,9 @@ public class Pawn extends Piece{
 		int file = getCoordinate().getFileIndex();
 		int rank = getCoordinate().getRankIndex();
 		
-		if(rank>3&&rank<6) {
-			if(file>3&&file<6) {
-				value+=5;
+		if(rank>=3&&rank<=4) {
+			if(file>=2&&file<=5) {
+				value+=1;
 			}
 		}
 		

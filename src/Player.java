@@ -27,24 +27,29 @@ public class Player {
 		int value = 0;
 		for(Piece piece : pieces) {
 			value += piece.calculateValue();
-			if(piece.calculateControlledTiles().size()==0)value -= 5;
+			value += calculateControlledTiles().size();
+			//if(piece.calculateControlledTiles().size()==0)value -= 5;
+			if(piece.getClass()!=Pawn.class
+			&& piece.getClass()!=King.class
+			&& piece.getFirstMove()==false) {
+				value+=5;
+			}
 			switch(team) {
 			case WHITE :
 				if(Board.black!=null
 				&& Board.black.controls(piece.getCoordinate())
 				&& !Board.white.controls(piece.getCoordinate())){
-					value -= 1;
+					value -= getValue()/2;
 				}
 				break;
 			case BLACK:
 				if(Board.white!=null
 				&& Board.white.controls(piece.getCoordinate())
 				&& !Board.black.controls(piece.getCoordinate())){
-					value -= 1;
+					value -= getValue()/2;
 				}
 				break;
 			}
-			if(!controls(piece.getCoordinate()))value -= 5;
 		}
 		value += controlledTiles.size();
 		return value;
